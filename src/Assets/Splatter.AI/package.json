@@ -1,6 +1,6 @@
 {
     "name": "com.samorme.splatter.ai",
-    "version": "1.2.2",
+    "version": "0.0.1",
     "displayName": "Splatter AI",
     "description": "Behaviour tree AI for Unity",
     "unity": "2019.1",
@@ -10,7 +10,7 @@
     },
     "keywords": [
         "Behaviour Tree",
-        "AI",
+        "AI"
     ],
     "author": {
         "name": "Sam Orme",
