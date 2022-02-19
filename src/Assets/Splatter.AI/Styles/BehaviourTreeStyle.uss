@@ -1,0 +1,18 @@
+.node {
+    width:180px;
+}
+
+.node.success {
+    background-color:green;
+    color:white;
+}
+
+.node.running {
+    background-color:orange;
+    color:white;
+}
+
+.node.failure {
+    background-color:red;
+    color:white;
+}
