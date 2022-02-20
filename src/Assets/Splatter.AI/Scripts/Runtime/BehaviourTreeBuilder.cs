@@ -144,11 +144,31 @@ namespace Splatter.AI {
         }
 
         /// <summary>
-        /// Wait forever.
+        /// Always returns <see cref="NodeResult.Success"/>. Add <c>.End()</c> to the end of the decorator.
         /// </summary>
         /// <param name="name">Node name</param>
-        public BehaviourTreeBuilder WaitForever(string name) {
-            AddNode(new EmptyRepeater(name, Tree));
+        public BehaviourTreeBuilder AlwaysSucceed(string name) {
+            AddNode(new SuccessDecorator(name, Tree));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Always returns <see cref="NodeResult.Running"/>. Add <c>.End()</c> to the end of the decorator.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        public BehaviourTreeBuilder AlwaysRunning(string name) {
+            AddNode(new RunningDecorator(name, Tree));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Always returns <see cref="NodeResult.Failure"/>. Add <c>.End()</c> to the end of the decorator.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        public BehaviourTreeBuilder AlwaysFail(string name) {
+            AddNode(new FailureDecorator(name, Tree));
 
             return this;
         }

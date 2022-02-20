@@ -1,27 +1,28 @@
-using NUnit.Framework;
 using Splatter.AI;
 using Splatter.Tests.Stubs;
 
 namespace Splatter.Tests {
     public class TestBase {
-        protected BehaviourTree Tree;
+        protected static BehaviourTree Tree = new BehaviourTreeStub();
 
-        [SetUp]
-        public void Init() {
-            // Runs before each test
-            Tree = new BehaviourTreeStub();
-        }
-
-        protected Node CreateSuccessNode() {
+        protected static Node CreateSuccessNode() {
             return new SuccessNode(Tree);
         }
 
-        protected Node CreateFailureNode() {
+        protected static Node CreateFailureNode() {
             return new FailureNode(Tree);
         }
 
-        protected Node CreateRunningNode() {
+        protected static Node CreateRunningNode() {
             return new RunningNode(Tree);
+        }
+
+        protected static Node[] GetNodes() {
+            return new[]{
+                CreateSuccessNode(),
+                CreateFailureNode(),
+                CreateRunningNode(),
+            };
         }
     }
 }
