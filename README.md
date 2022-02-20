@@ -1,4 +1,4 @@
-# Splatter.AI *(WIP)*
+# Splatter.AI
 Splatter.AI is a code based behaviour tree for Unity projects big and small.
 
 ## Installation
