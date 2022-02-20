@@ -1,5 +1,5 @@
 # Splatter.AI
-Splatter.AI is a code based behaviour tree for Unity projects big and small.
+Splatter.AI is a code based behaviour tree for Unity projects.
 
 ## Installation
 To add to your Unity project go to the Package Manager, click the plus in the top left of the window. Select git URL and enter: `https://github.com/ormesam/splatter.ai.git?path=/src/Assets/Splatter.AI`
@@ -11,6 +11,8 @@ To add to your Unity project go to the Package Manager, click the plus in the to
 3. Override `SetRoot` method, here you can build up your behaviour tree using the `BehaviourTreeBuilder` class as shown below
 4. Attach the script to the GameObject
 5. The tree will be executed every frame
+
+View the [wiki](https://github.com/ormesam/splatter.ai/wiki) for more documentation.
 
 ## Example
 
