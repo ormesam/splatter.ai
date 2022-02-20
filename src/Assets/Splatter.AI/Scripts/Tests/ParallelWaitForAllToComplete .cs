@@ -5,7 +5,7 @@ namespace Splatter.Tests {
     public class ParallelWaitForAllToComplete : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAll);
+            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -17,7 +17,7 @@ namespace Splatter.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAll);
+            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -29,7 +29,7 @@ namespace Splatter.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAll);
+            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateSuccessNode(),
                 CreateRunningNode(),

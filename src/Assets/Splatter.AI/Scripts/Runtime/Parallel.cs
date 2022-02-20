@@ -33,13 +33,13 @@ namespace Splatter.AI {
                 }
 
                 if (result == NodeResult.Success) {
-                    if (mode == ParallelMode.ExitOnSuccess || mode == ParallelMode.ExitOnAnyCompletion) {
+                    if (mode == ParallelMode.ExitOnAnySuccess || mode == ParallelMode.ExitOnAnyCompletion) {
                         return NodeResult.Success;
                     }
                 }
 
                 if (result == NodeResult.Failure) {
-                    if (mode == ParallelMode.ExitOnFailure || mode == ParallelMode.ExitOnAnyCompletion) {
+                    if (mode == ParallelMode.ExitOnAnyFailure || mode == ParallelMode.ExitOnAnyCompletion) {
                         return NodeResult.Failure;
                     }
                 }
@@ -48,11 +48,11 @@ namespace Splatter.AI {
             }
 
             // Wait for all children to complete
-            if (mode == ParallelMode.WaitForAll) {
+            if (mode == ParallelMode.WaitForAllToComplete) {
                 return results.All(i => i != NodeResult.Running) ? NodeResult.Success : NodeResult.Running;
             }
 
-            if (mode == ParallelMode.WaitForAllSuccess) {
+            if (mode == ParallelMode.WaitForAllToSucceed) {
                 return results.All(i => i == NodeResult.Success) ? NodeResult.Success : NodeResult.Running;
             }
 
