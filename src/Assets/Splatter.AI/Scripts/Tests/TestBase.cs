@@ -1,7 +1,7 @@
 using Splatter.AI;
 using Splatter.Tests.Stubs;
 
-namespace Splatter.Tests {
+namespace Splatter.AI.Tests {
     public class TestBase {
         protected static BehaviourTree Tree = new BehaviourTreeStub();
 

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Splatter.AI;
 
-namespace Splatter.Tests {
+namespace Splatter.AI.Tests {
     public class BehaviourTreeResultTests : TestBase {
         [Test]
         public void BehaviourTree_SuccessNode() {

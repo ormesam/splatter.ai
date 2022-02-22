@@ -1,6 +1,6 @@
 {
     "name": "Tests",
-    "rootNamespace": "Splatter.Tests",
+    "rootNamespace": "Splatter.AI.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

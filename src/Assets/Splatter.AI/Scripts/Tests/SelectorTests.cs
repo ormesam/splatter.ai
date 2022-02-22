@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Splatter.AI;
 
-namespace Splatter.Tests {
+namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
         [Test]
         public void Selector_Success() {

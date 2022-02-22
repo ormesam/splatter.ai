@@ -1,14 +1,12 @@
 ﻿using NUnit.Framework;
-using Splatter.AI;
 
-namespace Splatter.Tests {
+namespace Splatter.AI.Tests {
     public class DecoratorTests : TestBase {
         [Test]
         [TestCaseSource(nameof(GetNodes))]
         public void Decorator_Successful(Node node) {
             var decorator = new SuccessDecorator("Decorator", Tree);
             decorator.Child = node;
-
 
             Assert.AreEqual(NodeResult.Success, decorator.Execute());
         }
@@ -19,7 +17,6 @@ namespace Splatter.Tests {
             var decorator = new FailureDecorator("Decorator", Tree);
             decorator.Child = node;
 
-
             Assert.AreEqual(NodeResult.Failure, decorator.Execute());
         }
 
@@ -28,7 +25,6 @@ namespace Splatter.Tests {
         public void Decorator_Running(Node node) {
             var decorator = new RunningDecorator("Decorator", Tree);
             decorator.Child = node;
-
 
             Assert.AreEqual(NodeResult.Running, decorator.Execute());
         }
