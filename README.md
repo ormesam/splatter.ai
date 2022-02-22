@@ -4,7 +4,7 @@ Splatter.AI is a code based behaviour tree for Unity projects.
 ## Installation
 To add to your Unity project go to the Package Manager, click the plus in the top left of the window. Select git URL and enter: `https://github.com/ormesam/splatter.ai.git?path=/src/Assets/Splatter.AI`
 
-## Usage
+## Quick Start [More Docs...](https://github.com/ormesam/splatter.ai/wiki)
 
 1. Create new class deriving from BehaviourTree
 2. Override `Awake` method (optional) and initiate blackboard values, make sure to call `base.Awake();` at the start of the method
