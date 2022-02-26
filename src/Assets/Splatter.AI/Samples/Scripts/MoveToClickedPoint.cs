@@ -7,6 +7,8 @@ namespace Splatter.AI {
 
         private void Start() {
             agent = GetComponent<NavMeshAgent>();
+
+            Debug.Log("Click to move the player");
         }
 
         private void Update() {
