@@ -11,7 +11,6 @@ namespace Splatter.AI.Editor {
         public static void ShowEditor() {
             var window = GetWindow<Viewer>();
             window.titleContent = new GUIContent("Behaviour Tree Viewer");
-            window.minSize = new Vector2(800, 600);
         }
 
         private void CreateGUI() {
