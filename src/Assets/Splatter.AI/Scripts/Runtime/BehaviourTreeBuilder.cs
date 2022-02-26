@@ -27,7 +27,7 @@ namespace Splatter.AI {
         /// <param name="resetIfInterrupted">Reset behaviour tree if interrupted</param>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
-        public BehaviourTreeBuilder Sequence(string name, bool resetIfInterrupted = true, AbortType abortType = AbortType.None, Func<bool> condition = null) {
+        public BehaviourTreeBuilder Sequence(string name = "Sequence", AbortType abortType = AbortType.None, Func<bool> condition = null, bool resetIfInterrupted = false) {
             AddNode(new Sequencer(name, Tree, resetIfInterrupted, abortType, condition));
 
             return this;
@@ -39,7 +39,7 @@ namespace Splatter.AI {
         /// <param name="name">Node name</param>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
-        public BehaviourTreeBuilder Selector(string name, AbortType abortType = AbortType.None, Func<bool> condition = null) {
+        public BehaviourTreeBuilder Selector(string name = "Selector", AbortType abortType = AbortType.None, Func<bool> condition = null) {
             AddNode(new Selector(name, Tree, abortType, condition));
 
             return this;
@@ -50,18 +50,8 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="name">Node name</param>
         /// <param name="mode">Parallel mode</param>
-        public BehaviourTreeBuilder Parallel(string name, ParallelMode mode) {
+        public BehaviourTreeBuilder Parallel(string name = "Parallel", ParallelMode mode = ParallelMode.WaitForAllToSucceed) {
             AddNode(new Parallel(name, Tree, mode));
-
-            return this;
-        }
-
-        /// <summary>
-        /// Repeat a single node forever. Only supprts one node. Add <c>.End()</c> to the end of the repeation.
-        /// </summary>
-        /// <param name="name">Node name</param>
-        public BehaviourTreeBuilder RepeatForever(string name) {
-            AddNode(new Repeater(name, Tree));
 
             return this;
         }
@@ -147,8 +137,8 @@ namespace Splatter.AI {
         /// Always returns <see cref="NodeResult.Success"/>. Add <c>.End()</c> to the end of the decorator.
         /// </summary>
         /// <param name="name">Node name</param>
-        public BehaviourTreeBuilder AlwaysSucceed(string name) {
-            AddNode(new SuccessDecorator(name, Tree));
+        public BehaviourTreeBuilder AlwaysSucceed(string name = "Always Succeed") {
+            AddNode(new SuccessDecorator("Always Succeed", Tree));
 
             return this;
         }
@@ -157,7 +147,7 @@ namespace Splatter.AI {
         /// Always returns <see cref="NodeResult.Running"/>. Add <c>.End()</c> to the end of the decorator.
         /// </summary>
         /// <param name="name">Node name</param>
-        public BehaviourTreeBuilder AlwaysRunning(string name) {
+        public BehaviourTreeBuilder AlwaysRunning(string name = "Always Running") {
             AddNode(new RunningDecorator(name, Tree));
 
             return this;
@@ -167,7 +157,7 @@ namespace Splatter.AI {
         /// Always returns <see cref="NodeResult.Failure"/>. Add <c>.End()</c> to the end of the decorator.
         /// </summary>
         /// <param name="name">Node name</param>
-        public BehaviourTreeBuilder AlwaysFail(string name) {
+        public BehaviourTreeBuilder AlwaysFail(string name = "Always Fail") {
             AddNode(new FailureDecorator(name, Tree));
 
             return this;

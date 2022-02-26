@@ -17,8 +17,8 @@ namespace Splatter.AI.Examples {
         protected override Node CreateRoot() {
             return new BehaviourTreeBuilder(this)
                 .AlwaysRunning("Root")
-                    .Selector("")
-                        .Sequence("Player detection", resetIfInterrupted: true, abortType: AbortType.SelfAndLower, () => CanSeePlayer())
+                    .Selector("Selector")
+                        .Sequence("Player detection", AbortType.SelfAndLower, () => CanSeePlayer())
                             .Do("Go to player", () => {
                                 var navMeshAgent = GetComponent<NavMeshAgent>();
                                 navMeshAgent.SetDestination(Player.transform.position);
