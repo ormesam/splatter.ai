@@ -24,10 +24,10 @@ namespace Splatter.AI {
         /// Adds sequence to the behaviour tree. Add <c>.End()</c> to the end of the sequence.
         /// </summary>
         /// <param name="name">Node name</param>
-        /// <param name="resetIfInterrupted">Reset behaviour tree if interrupted</param>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
-        public BehaviourTreeBuilder Sequence(string name = "Sequence", AbortType abortType = AbortType.None, Func<bool> condition = null, bool resetIfInterrupted = false) {
+        /// <param name="resetIfInterrupted">Reset sequence if interrupted</param>
+        public BehaviourTreeBuilder Sequence(string name = "Sequence", AbortType abortType = AbortType.None, Func<bool> condition = null, bool resetIfInterrupted = true) {
             AddNode(new Sequencer(name, Tree, resetIfInterrupted, abortType, condition));
 
             return this;
@@ -159,6 +159,36 @@ namespace Splatter.AI {
         /// <param name="name">Node name</param>
         public BehaviourTreeBuilder AlwaysFail(string name = "Always Fail") {
             AddNode(new FailureDecorator(name, Tree));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Always returns <see cref="NodeResult.Success"/>.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        public BehaviourTreeBuilder Success(string name = "Always Success") {
+            Do(name, () => NodeResult.Success);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Always returns <see cref="NodeResult.Running"/>.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        public BehaviourTreeBuilder Running(string name = "Always Running") {
+            Do(name, () => NodeResult.Running);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Always returns <see cref="NodeResult.Failure"/>.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        public BehaviourTreeBuilder Failure(string name = "Always Failure") {
+            Do(name, () => NodeResult.Failure);
 
             return this;
         }

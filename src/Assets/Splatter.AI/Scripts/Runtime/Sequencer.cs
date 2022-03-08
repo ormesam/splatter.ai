@@ -13,6 +13,7 @@ namespace Splatter.AI {
         /// Initializes a new instance of the <see cref="Sequencer"/> class.
         /// </summary>
         /// <param name="tree">Behaviour tree</param>
+        /// <param name="resetIfInterrupted">Reset sequence if interrupted</param>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate when aborting</param>
         public Sequencer(string name, BehaviourTree tree, bool resetIfInterrupted, AbortType abortType = AbortType.None, Func<bool> condition = null)
