@@ -1,5 +1,5 @@
 # Splatter.AI
-Splatter.AI is a code based behaviour tree for Unity projects.
+Splatter.AI is a code based behaviour tree for Unity projects. Current version v0.0.2 can be found in the releases, note there may be breaking changes while in early preview.
 
 ## Installation
 To add to your Unity project go to the Package Manager, click the plus in the top left of the window. Select git URL and enter: `https://github.com/ormesam/splatter.ai.git?path=/src/Assets/Splatter.AI`
