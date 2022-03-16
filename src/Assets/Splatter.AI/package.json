@@ -1,8 +1,8 @@
 {
     "name": "com.samorme.splatter.ai",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "displayName": "Splatter AI",
-    "description": "Behaviour tree AI for Unity",
+    "description": "Code based behaviour tree AI for Unity",
     "unity": "2019.1",
     "unityRelease": "0b5",
     "licensesUrl": "https://github.com/ormesam/splatter.ai/blob/main/LICENSE",
