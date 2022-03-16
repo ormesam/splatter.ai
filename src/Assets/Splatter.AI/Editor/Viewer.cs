@@ -21,7 +21,7 @@ namespace Splatter.AI.Editor {
         }
 
         private void AddStyles() {
-            rootVisualElement.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Splatter.AI/Styles/BehaviourTreeStyle.uss"));
+            rootVisualElement.styleSheets.Add(Resources.Load<StyleSheet>("BehaviourTreeStyle"));
         }
 
         private void AddGraph() {
