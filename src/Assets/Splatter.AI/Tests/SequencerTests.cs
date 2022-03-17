@@ -5,7 +5,7 @@ namespace Splatter.AI.Tests {
     public class SequencerTests : TestBase {
         [Test]
         public void Sequencer_Success() {
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
             sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -19,7 +19,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Sequencer_Failure() {
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
             sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -50,7 +50,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Sequencer_Running() {
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
             sequencer.Children = new[] {
                 CreateRunningNode(),
                 CreateRunningNode(),
@@ -78,7 +78,8 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Sequencer_Reset() {
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, true);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
+            sequencer.ResetIfInterrupted();
             sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -106,7 +107,8 @@ namespace Splatter.AI.Tests {
         public void Sequencer_Abort_Self() {
             bool condition = true;
 
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false, AbortType.Self, () => condition);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
+            sequencer.SetAbortType(AbortType.Self, () => condition);
             sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -124,8 +126,9 @@ namespace Splatter.AI.Tests {
         public void Sequencer_Abort_Lower() {
             bool condition = false;
 
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false);
-            Sequencer childSequencer = new Sequencer("Sequencer", Tree, false, AbortType.Lower, () => condition);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
+            Sequencer childSequencer = new Sequencer("Sequencer", Tree);
+            childSequencer.SetAbortType(AbortType.Lower, () => condition);
 
             childSequencer.Children = new[] {
                 CreateSuccessNode(),
@@ -164,8 +167,9 @@ namespace Splatter.AI.Tests {
         public void Sequencer_Abort_SelfAndLower() {
             bool condition = false;
 
-            Sequencer sequencer = new Sequencer("Sequencer", Tree, false);
-            Sequencer childSequencer = new Sequencer("Sequencer", Tree, false, AbortType.SelfAndLower, () => condition);
+            Sequencer sequencer = new Sequencer("Sequencer", Tree);
+            Sequencer childSequencer = new Sequencer("Sequencer", Tree);
+            childSequencer.SetAbortType(AbortType.SelfAndLower, () => condition);
 
             childSequencer.Children = new[] {
                 CreateSuccessNode(),

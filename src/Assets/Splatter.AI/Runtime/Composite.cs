@@ -40,16 +40,9 @@ namespace Splatter.AI {
         /// Initializes a new instance of the <see cref="Composite"/> class.
         /// </summary>
         /// <param name="tree">Behaviour tree</param>
-        /// <param name="abortType">Abort type (optional)</param>
-        /// <param name="condition">Condition evaluated for aborting (optional)</param>
-        public Composite(string name, BehaviourTree tree, AbortType abortType = AbortType.None, Func<bool> condition = null) : base(name, tree) {
+        public Composite(string name, BehaviourTree tree) : base(name, tree) {
             Children = new List<Node>();
-            AbortType = abortType;
-            Condition = condition;
-
-            if (AbortType != AbortType.None && condition == null) {
-                throw new InvalidOperationException($"{nameof(Condition)} cannot be null if {nameof(AbortType)} is not set to none");
-            }
+            AbortType = AbortType.None;
         }
 
         /// <summary>
@@ -74,6 +67,20 @@ namespace Splatter.AI {
             }
 
             return composite.Condition();
+        }
+
+        /// <summary>
+        /// Sets the composite's abort type and condition
+        /// </summary>
+        /// <param name="abortType">Abort type (optional)</param>
+        /// <param name="condition">Condition evaluated for aborting (optional)</param>
+        public void SetAbortType(AbortType abortType, Func<bool> condition) {
+            AbortType = abortType;
+            Condition = condition;
+
+            if (AbortType != AbortType.None && condition == null) {
+                throw new InvalidOperationException($"{nameof(Condition)} cannot be null if {nameof(AbortType)} is not set to none");
+            }
         }
     }
 }

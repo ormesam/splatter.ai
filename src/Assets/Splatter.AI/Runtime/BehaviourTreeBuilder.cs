@@ -27,8 +27,8 @@ namespace Splatter.AI {
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
         /// <param name="resetIfInterrupted">Reset sequence if interrupted</param>
-        public BehaviourTreeBuilder Sequence(string name = "Sequence", AbortType abortType = AbortType.None, Func<bool> condition = null, bool resetIfInterrupted = true) {
-            AddNode(new Sequencer(name, Tree, resetIfInterrupted, abortType, condition));
+        public BehaviourTreeBuilder Sequence(string name = "Sequence") {
+            AddNode(new Sequencer(name, Tree));
 
             return this;
         }
@@ -39,8 +39,8 @@ namespace Splatter.AI {
         /// <param name="name">Node name</param>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
-        public BehaviourTreeBuilder Selector(string name = "Selector", AbortType abortType = AbortType.None, Func<bool> condition = null) {
-            AddNode(new Selector(name, Tree, abortType, condition));
+        public BehaviourTreeBuilder Selector(string name = "Selector") {
+            AddNode(new Selector(name, Tree));
 
             return this;
         }
@@ -52,6 +52,38 @@ namespace Splatter.AI {
         /// <param name="mode">Parallel mode</param>
         public BehaviourTreeBuilder Parallel(string name = "Parallel", ParallelMode mode = ParallelMode.WaitForAllToSucceed) {
             AddNode(new Parallel(name, Tree, mode));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Makes current composite node abortable
+        /// </summary>
+        /// <param name="abortType">Abort type</param>
+        /// <param name="condition">Condition to evaluate</param>
+        public BehaviourTreeBuilder MakeAbortable(AbortType abortType, Func<bool> condition) {
+            var currentNode = stack.Peek();
+
+            if (currentNode is Composite composite) {
+                composite.SetAbortType(abortType, condition);
+            } else {
+                throw new InvalidOperationException("Current node is not abortable");
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Makes current sequence node abortable
+        /// </summary>
+        public BehaviourTreeBuilder ResetIfInterrupted() {
+            var currentNode = stack.Peek();
+
+            if (currentNode is Sequencer composite) {
+                composite.ResetIfInterrupted();
+            } else {
+                throw new InvalidOperationException("Current node is not a sequencer");
+            }
 
             return this;
         }

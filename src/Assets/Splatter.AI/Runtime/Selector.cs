@@ -9,11 +9,10 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Selector"/> class.
         /// </summary>
+        /// <param name="name">Node name</param>
         /// <param name="tree">Behaviour tree</param>
-        /// <param name="abortType">Abort type used for this compsite node</param>
-        /// <param name="condition">Condition used to evaluate when aborting</param>
-        public Selector(string name, BehaviourTree tree, AbortType abortType = AbortType.None, Func<bool> condition = null)
-            : base(name, tree, abortType, condition) {
+        public Selector(string name, BehaviourTree tree)
+            : base(name, tree) {
         }
 
         protected override NodeResult ExecuteNode() {

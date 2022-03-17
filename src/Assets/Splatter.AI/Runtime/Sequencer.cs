@@ -6,20 +6,16 @@ namespace Splatter.AI {
     /// If a child fails, <see cref="NodeResult.Failure"/> is returned.
     /// </summary>
     public class Sequencer : Composite {
-        private readonly bool resetIfInterrupted;
+        private bool resetIfInterrupted;
         private int lastRanOnTick = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sequencer"/> class.
         /// </summary>
+        /// <param name="name">Node name</param>
         /// <param name="tree">Behaviour tree</param>
-        /// <param name="resetIfInterrupted">Reset sequence if interrupted</param>
-        /// <param name="abortType">Abort type</param>
-        /// <param name="condition">Condition to evaluate when aborting</param>
-        public Sequencer(string name, BehaviourTree tree, bool resetIfInterrupted, AbortType abortType = AbortType.None, Func<bool> condition = null)
-            : base(name, tree, abortType, condition) {
-
-            this.resetIfInterrupted = resetIfInterrupted;
+        public Sequencer(string name, BehaviourTree tree)
+            : base(name, tree) {
         }
 
         protected override NodeResult ExecuteNode() {
@@ -56,6 +52,10 @@ namespace Splatter.AI {
             }
 
             return NodeResult.Success;
+        }
+
+        public void ResetIfInterrupted() {
+            resetIfInterrupted = true;
         }
 
 #if UNITY_INCLUDE_TESTS

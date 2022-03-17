@@ -66,7 +66,8 @@ namespace Splatter.AI.Tests {
         public void Selector_Abort_Self() {
             bool condition = true;
 
-            Selector selector = new Selector("Selector", Tree, AbortType.Self, () => condition);
+            Selector selector = new Selector("Selector", Tree);
+            selector.SetAbortType(AbortType.Self, () => condition);
             selector.Children = new[] {
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -83,7 +84,8 @@ namespace Splatter.AI.Tests {
             bool condition = false;
 
             Selector selector = new Selector("Selector", Tree);
-            Selector childSelector = new Selector("Selector", Tree, AbortType.Lower, () => condition);
+            Selector childSelector = new Selector("Selector", Tree);
+            childSelector.SetAbortType(AbortType.Lower, () => condition);
 
             childSelector.Children = new[] {
                 CreateFailureNode(),
@@ -125,7 +127,8 @@ namespace Splatter.AI.Tests {
             bool condition = false;
 
             Selector selector = new Selector("Selector", Tree);
-            Selector childSelector = new Selector("Selector", Tree, AbortType.SelfAndLower, () => condition);
+            Selector childSelector = new Selector("Selector", Tree);
+            childSelector.SetAbortType(AbortType.SelfAndLower, () => condition);
 
             childSelector.Children = new[] {
                 CreateSuccessNode(),
