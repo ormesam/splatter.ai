@@ -61,7 +61,7 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="abortType">Abort type</param>
         /// <param name="condition">Condition to evaluate</param>
-        public BehaviourTreeBuilder MakeAbortable(AbortType abortType, Func<bool> condition) {
+        public BehaviourTreeBuilder Abortable(AbortType abortType, Func<bool> condition) {
             var currentNode = stack.Peek();
 
             if (currentNode is Composite composite) {
@@ -105,6 +105,15 @@ namespace Splatter.AI {
         /// <param name="condition">Condition to evaluate</param>
         public BehaviourTreeBuilder Condition(string name, Func<bool> condition) {
             Do(name, () => condition() ? NodeResult.Success : NodeResult.Failure);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Invert the result of the child node.
+        /// </summary>
+        public BehaviourTreeBuilder Invert(){
+            AddNode(new InvertDecorator(Tree));
 
             return this;
         }
