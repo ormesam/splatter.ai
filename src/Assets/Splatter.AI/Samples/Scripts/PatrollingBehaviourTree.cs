@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Splatter.AI.Examples {
     public class PatrollingBehaviourTree : BehaviourTree {
@@ -26,44 +25,44 @@ namespace Splatter.AI.Examples {
                         selector.Running();
                     });
                 })
-                .AlwaysRunning("Root")
-                    .Selector("Selector")
-                        .Sequence("Player detection")
-                            .Abortable(AbortType.SelfAndLower, () => CanSeePlayer())
-                            .Do("Go to player", () => {
-                                var navMeshAgent = GetComponent<NavMeshAgent>();
-                                navMeshAgent.SetDestination(Player.transform.position);
+                //.AlwaysRunning("Root")
+                //    .Selector("Selector")
+                //        .Sequence("Player detection")
+                //            .Abortable(AbortType.SelfAndLower, () => CanSeePlayer())
+                //            .Do("Go to player", () => {
+                //                var navMeshAgent = GetComponent<NavMeshAgent>();
+                //                navMeshAgent.SetDestination(Player.transform.position);
 
-                                return NodeResult.Running;
-                            })
-                        // Other actions...
-                        .End()
-                        .Sequence("Patrol")
-                            .Do("Set next waypoint", () => {
-                                int currentWaypointIdx = GetItem<int>("CurrentWaypointIdx");
-                                var navMeshAgent = GetComponent<NavMeshAgent>();
+                //                return NodeResult.Running;
+                //            })
+                //        // Other actions...
+                //        .End()
+                //        .Sequence("Patrol")
+                //            .Do("Set next waypoint", () => {
+                //                int currentWaypointIdx = GetItem<int>("CurrentWaypointIdx");
+                //                var navMeshAgent = GetComponent<NavMeshAgent>();
 
-                                currentWaypointIdx++;
+                //                currentWaypointIdx++;
 
-                                if (currentWaypointIdx >= Waypoints.Length) {
-                                    currentWaypointIdx = 0;
-                                }
+                //                if (currentWaypointIdx >= Waypoints.Length) {
+                //                    currentWaypointIdx = 0;
+                //                }
 
-                                Blackboard["CurrentWaypointIdx"] = currentWaypointIdx;
+                //                Blackboard["CurrentWaypointIdx"] = currentWaypointIdx;
 
-                                navMeshAgent.SetDestination(Waypoints[currentWaypointIdx].transform.position);
+                //                navMeshAgent.SetDestination(Waypoints[currentWaypointIdx].transform.position);
 
-                                return NodeResult.Success;
-                            })
-                            .WaitUntil("Move to waypoint", () => {
-                                var navMeshAgent = GetComponent<NavMeshAgent>();
+                //                return NodeResult.Success;
+                //            })
+                //            .WaitUntil("Move to waypoint", () => {
+                //                var navMeshAgent = GetComponent<NavMeshAgent>();
 
-                                return Vector3.Distance(navMeshAgent.destination, transform.position) <= navMeshAgent.stoppingDistance;
-                            })
-                            .Wait("Pause", 1, 3)
-                        .End()
-                    .End()
-                .End()
+                //                return Vector3.Distance(navMeshAgent.destination, transform.position) <= navMeshAgent.stoppingDistance;
+                //            })
+                //            .Wait("Pause", 1, 3)
+                //        .End()
+                //    .End()
+                //.End()
                 .Build();
         }
 
