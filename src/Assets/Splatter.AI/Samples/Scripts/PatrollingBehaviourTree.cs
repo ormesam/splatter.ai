@@ -16,6 +16,16 @@ namespace Splatter.AI.Examples {
 
         protected override Node CreateRoot() {
             return new BehaviourTreeBuilder(this)
+                .Sequence(sequence => {
+                    sequence.ResetIfInterrupted();
+                    sequence.Do("", () => NodeResult.Success);
+                    sequence.Do("", () => NodeResult.Success);
+                    sequence.Do("", () => NodeResult.Success);
+                    sequence.Do("", () => NodeResult.Success);
+                    sequence.Selector(selector => {
+                        selector.Running();
+                    });
+                })
                 .AlwaysRunning("Root")
                     .Selector("Selector")
                         .Sequence("Player detection")

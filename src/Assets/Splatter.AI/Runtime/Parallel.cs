@@ -13,8 +13,8 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="tree">Behaviour tree</param>
         /// <param name="mode">Parallel mode</param>
-        public Parallel(string name, BehaviourTree tree, ParallelMode mode)
-            : base(name, tree) {
+        public Parallel(BehaviourTree tree, ParallelMode mode)
+            : base("Parallel", tree) {
 
             this.mode = mode;
         }

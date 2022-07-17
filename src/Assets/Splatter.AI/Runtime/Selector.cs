@@ -1,5 +1,3 @@
-using System;
-
 namespace Splatter.AI {
     /// <summary>
     /// Returns <see cref="NodeResult.Running"/> until a child returns <see cref="NodeResult.Success"/>. 
@@ -11,8 +9,8 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="name">Node name</param>
         /// <param name="tree">Behaviour tree</param>
-        public Selector(string name, BehaviourTree tree)
-            : base(name, tree) {
+        public Selector(BehaviourTree tree)
+            : base("Selector", tree) {
         }
 
         protected override NodeResult ExecuteNode() {

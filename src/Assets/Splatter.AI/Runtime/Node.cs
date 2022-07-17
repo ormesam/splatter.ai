@@ -10,7 +10,7 @@ namespace Splatter.AI {
         /// <summary>
         /// Node name
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Behaviour tree this node is on.

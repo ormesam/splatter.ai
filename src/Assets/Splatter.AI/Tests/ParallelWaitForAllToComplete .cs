@@ -1,11 +1,10 @@
 using NUnit.Framework;
-using Splatter.AI;
 
 namespace Splatter.AI.Tests {
     public class ParallelWaitForAllToComplete : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -17,7 +16,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -29,7 +28,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel("Parallel", Tree, ParallelMode.WaitForAllToComplete);
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
             parallel.Children = new[]{
                 CreateSuccessNode(),
                 CreateRunningNode(),
