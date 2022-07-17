@@ -1,6 +1,6 @@
 ﻿namespace Splatter.AI {
     public class FailureDecorator : Decorator {
-        public FailureDecorator(string name, BehaviourTree tree) : base(name, tree) {
+        public FailureDecorator(BehaviourTree tree) : base("Always Fail", tree) {
         }
 
         protected override NodeResult ExecuteNode() {

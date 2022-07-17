@@ -1,6 +1,6 @@
 ﻿namespace Splatter.AI {
     public class RunningDecorator : Decorator {
-        public RunningDecorator(string name, BehaviourTree tree) : base(name, tree) {
+        public RunningDecorator(BehaviourTree tree) : base("Always Running", tree) {
         }
 
         protected override NodeResult ExecuteNode() {

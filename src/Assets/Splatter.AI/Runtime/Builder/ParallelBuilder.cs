@@ -2,39 +2,34 @@
 using System.Linq;
 
 namespace Splatter.AI {
-    public class ParallelBuilder : BuilderBase {
+    public class ParallelBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
         private readonly Parallel parallel;
+        private readonly TParent parent;
 
-        public ParallelBuilder(BehaviourTree tree, ParallelMode mode) : base(tree) {
-            this.parallel = new Parallel(tree, mode);
+        public ParallelBuilder(TParent parent, ParallelMode mode) : base(parent.Tree) {
+            this.parallel = new Parallel(parent.Tree, mode);
+            this.parent = parent;
         }
 
-        /// <summary>
-        /// Makes the composite node abortable
-        /// </summary>
-        /// <param name="abortType">Abort type</param>
-        /// <param name="condition">Condition to evaluate</param>
         public void Abortable(AbortType abortType, Func<bool> condition) {
             parallel.SetAbortType(abortType, condition);
         }
 
-        public void Name(string name) {
+        public void SetName(string name) {
             parallel.Name = name;
         }
 
-        /// <summary>
-        /// End the composite node
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Parallel Build() {
+        public TParent End() {
             if (!parallel.Children.Any()) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 
-            return parallel;
+            parent.AddNode(parallel);
+
+            return parent;
         }
 
-        protected override void AddNode(Node node) {
+        public void AddNode(Node node) {
             parallel.Children.Add(node);
         }
     }

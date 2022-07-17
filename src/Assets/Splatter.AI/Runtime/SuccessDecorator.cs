@@ -1,6 +1,6 @@
 ﻿namespace Splatter.AI {
     public class SuccessDecorator : Decorator {
-        public SuccessDecorator(string name, BehaviourTree tree) : base(name, tree) {
+        public SuccessDecorator(BehaviourTree tree) : base("Always Succeed", tree) {
         }
 
         protected override NodeResult ExecuteNode() {

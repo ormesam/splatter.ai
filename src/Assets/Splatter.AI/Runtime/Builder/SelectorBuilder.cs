@@ -2,39 +2,34 @@
 using System.Linq;
 
 namespace Splatter.AI {
-    public class SelectorBuilder : BuilderBase {
+    public class SelectorBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
         private readonly Selector selector;
+        private readonly TParent parent;
 
-        public SelectorBuilder(BehaviourTree tree) : base(tree) {
-            this.selector = new Selector(tree);
+        public SelectorBuilder(TParent parent) : base(parent.Tree) {
+            this.selector = new Selector(parent.Tree);
+            this.parent = parent;
         }
 
-        /// <summary>
-        /// Makes the composite node abortable
-        /// </summary>
-        /// <param name="abortType">Abort type</param>
-        /// <param name="condition">Condition to evaluate</param>
         public void Abortable(AbortType abortType, Func<bool> condition) {
             selector.SetAbortType(abortType, condition);
         }
 
-        public void Name(string name) {
+        public void SetName(string name) {
             selector.Name = name;
         }
 
-        /// <summary>
-        /// End the composite node
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Selector Build() {
+        public TParent End() {
             if (!selector.Children.Any()) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 
-            return selector;
+            parent.AddNode(selector);
+
+            return parent;
         }
 
-        protected override void AddNode(Node node) {
+        public void AddNode(Node node) {
             selector.Children.Add(node);
         }
     }

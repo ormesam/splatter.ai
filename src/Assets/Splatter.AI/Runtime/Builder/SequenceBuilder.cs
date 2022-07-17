@@ -2,46 +2,42 @@
 using System.Linq;
 
 namespace Splatter.AI {
-    public class SequenceBuilder : BuilderBase {
+    public class SequenceBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
         private readonly Sequencer sequencer;
+        private readonly TParent parent;
 
-        public SequenceBuilder(BehaviourTree tree) : base(tree) {
-            this.sequencer = new Sequencer(tree);
+        public SequenceBuilder(TParent parent) : base(parent.Tree) {
+            this.sequencer = new Sequencer(parent.Tree);
+            this.parent = parent;
         }
 
-        /// <summary>
-        /// Makes the composite node abortable
-        /// </summary>
-        /// <param name="abortType">Abort type</param>
-        /// <param name="condition">Condition to evaluate</param>
-        public void Abortable(AbortType abortType, Func<bool> condition) {
+        public SequenceBuilder<TParent> Abortable(AbortType abortType, Func<bool> condition) {
             sequencer.SetAbortType(abortType, condition);
+
+            return this;
         }
 
-        /// <summary>
-        /// Reset the sequence if the behaviour tree is interrupted
-        /// </summary>
-        public void ResetIfInterrupted() {
+        public SequenceBuilder<TParent> ResetIfInterrupted() {
             sequencer.ResetIfInterrupted();
+
+            return this;
         }
 
-        public void Name(string name) {
+        public void SetName(string name) {
             sequencer.Name = name;
         }
 
-        /// <summary>
-        /// End the composite node
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Sequencer Build() {
+        public TParent End() {
             if (!sequencer.Children.Any()) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 
-            return sequencer;
+            parent.AddNode(sequencer);
+
+            return parent;
         }
 
-        protected override void AddNode(Node node) {
+        public void AddNode(Node node) {
             sequencer.Children.Add(node);
         }
     }

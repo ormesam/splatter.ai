@@ -1,30 +1,30 @@
 ﻿using System;
 
 namespace Splatter.AI {
-    public class DecoratorBuilder : BuilderBase {
+    public class DecoratorBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
+        private readonly TParent parent;
         private readonly Decorator decorator;
 
-        public DecoratorBuilder(BehaviourTree tree, Decorator decorator) : base(tree) {
+        public DecoratorBuilder(TParent parent, Decorator decorator) : base(parent.Tree) {
+            this.parent = parent;
             this.decorator = decorator;
         }
 
-        public void Name(string name) {
+        public void SetName(string name) {
             decorator.Name = name;
         }
 
-        /// <summary>
-        /// End the decorator node
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Decorator Build() {
+        public TParent End() {
             if (decorator.Child == null) {
                 throw new InvalidOperationException("Decorator node does not have a child.");
             }
 
-            return decorator;
+            parent.AddNode(decorator);
+
+            return parent;
         }
 
-        protected override void AddNode(Node node) {
+        public void AddNode(Node node) {
             if (decorator.Child != null) {
                 throw new InvalidOperationException("Decorator child already set");
             }
