@@ -1,6 +1,6 @@
 {
     "name": "com.samorme.splatter.ai",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "displayName": "Splatter AI",
     "description": "Code based behaviour tree AI for Unity",
     "unity": "2019.1",

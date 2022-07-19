@@ -56,10 +56,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Invert the result of the child node.
         /// </summary>
-        public static T Invert<T>(this T builder) where T : IBuilder {
-            builder.AddNode(new InvertDecorator(builder.Tree));
-
-            return builder;
+        public static DecoratorBuilder<T> Invert<T>(this T builder) where T : IBuilder {
+            return new DecoratorBuilder<T>(builder, new InvertDecorator(builder.Tree));
         }
 
         /// <summary>

@@ -11,8 +11,10 @@ namespace Splatter.AI {
             this.parent = parent;
         }
 
-        public void Abortable(AbortType abortType, Func<bool> condition) {
+        public SelectorBuilder<TParent> Abortable(AbortType abortType, Func<bool> condition) {
             selector.SetAbortType(abortType, condition);
+
+            return this;
         }
 
         public void SetName(string name) {
