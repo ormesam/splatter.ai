@@ -1,5 +1,4 @@
-using Splatter.AI;
-using Splatter.Tests.Stubs;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class TestBase {

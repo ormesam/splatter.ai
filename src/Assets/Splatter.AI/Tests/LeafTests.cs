@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Splatter.AI;
 
 namespace Splatter.AI.Tests {
     public class LeafTests : TestBase {

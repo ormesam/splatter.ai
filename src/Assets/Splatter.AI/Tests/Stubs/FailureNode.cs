@@ -1,6 +1,4 @@
-﻿using Splatter.AI;
-
-namespace Splatter.Tests.Stubs {
+﻿namespace Splatter.AI.Tests.Stubs {
     public class FailureNode : Node {
         public FailureNode(BehaviourTree tree) : base("Failure", tree) {
         }

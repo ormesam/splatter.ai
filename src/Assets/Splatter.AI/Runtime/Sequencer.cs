@@ -52,13 +52,14 @@ namespace Splatter.AI {
             return NodeResult.Success;
         }
 
-        public void ResetIfInterrupted() {
-            resetIfInterrupted = true;
+        public void SetResetIfInterrupted(bool reset) {
+            resetIfInterrupted = reset;
         }
 
 #if UNITY_INCLUDE_TESTS
         // Useful for debugging tests
         public int CurrentIndex => CurrentNodeIdx;
+        public bool ResetIfInterrupted => resetIfInterrupted;
 #endif
     }
 }

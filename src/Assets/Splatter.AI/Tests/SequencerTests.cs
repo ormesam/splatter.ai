@@ -78,7 +78,7 @@ namespace Splatter.AI.Tests {
         [Test]
         public void Sequencer_Reset() {
             Sequencer sequencer = new Sequencer(Tree);
-            sequencer.ResetIfInterrupted();
+            sequencer.SetResetIfInterrupted(true);
             sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
