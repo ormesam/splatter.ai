@@ -1,11 +1,10 @@
 using NUnit.Framework;
-using Splatter.AI;
 
 namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
         [Test]
         public void Selector_Success() {
-            Selector selector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
             selector.Children = new[] {
                 CreateSuccessNode(),
                 CreateRunningNode(),
@@ -36,7 +35,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Selector_Failed() {
-            Selector selector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
             selector.Children = new[] {
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -50,7 +49,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Selector_Running() {
-            Selector selector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
             selector.Children = new[] {
                 CreateRunningNode(),
                 CreateRunningNode(),
@@ -66,7 +65,7 @@ namespace Splatter.AI.Tests {
         public void Selector_Abort_Self() {
             bool condition = true;
 
-            Selector selector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
             selector.SetAbortType(AbortType.Self, () => condition);
             selector.Children = new[] {
                 CreateFailureNode(),
@@ -83,8 +82,8 @@ namespace Splatter.AI.Tests {
         public void Selector_Abort_Lower() {
             bool condition = false;
 
-            Selector selector = new Selector("Selector", Tree);
-            Selector childSelector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
+            Selector childSelector = new Selector(Tree);
             childSelector.SetAbortType(AbortType.Lower, () => condition);
 
             childSelector.Children = new[] {
@@ -126,8 +125,8 @@ namespace Splatter.AI.Tests {
         public void Selector_Abort_SelfAndLower() {
             bool condition = false;
 
-            Selector selector = new Selector("Selector", Tree);
-            Selector childSelector = new Selector("Selector", Tree);
+            Selector selector = new Selector(Tree);
+            Selector childSelector = new Selector(Tree);
             childSelector.SetAbortType(AbortType.SelfAndLower, () => condition);
 
             childSelector.Children = new[] {

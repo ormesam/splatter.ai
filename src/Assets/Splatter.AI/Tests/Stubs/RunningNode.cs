@@ -1,6 +1,4 @@
-﻿using Splatter.AI;
-
-namespace Splatter.Tests.Stubs {
+﻿namespace Splatter.AI.Tests.Stubs {
     public class RunningNode : Node {
         public RunningNode(BehaviourTree tree) : base("Running", tree) {
         }

@@ -16,9 +16,11 @@ namespace Splatter.AI.Examples {
 
         protected override Node CreateRoot() {
             return new BehaviourTreeBuilder(this)
-                .AlwaysRunning("Root")
-                    .Selector("Selector")
-                        .Sequence("Player detection")
+                .AlwaysRunning()
+                    .Name("Root")
+                    .Selector()
+                        .Sequence()
+                            .Name("Player detection")
                             .Abortable(AbortType.SelfAndLower, () => CanSeePlayer())
                             .Do("Go to player", () => {
                                 var navMeshAgent = GetComponent<NavMeshAgent>();
@@ -28,7 +30,8 @@ namespace Splatter.AI.Examples {
                             })
                         // Other actions...
                         .End()
-                        .Sequence("Patrol")
+                        .Sequence()
+                            .Name("Patrol")
                             .Do("Set next waypoint", () => {
                                 int currentWaypointIdx = GetItem<int>("CurrentWaypointIdx");
                                 var navMeshAgent = GetComponent<NavMeshAgent>();

@@ -5,7 +5,7 @@ namespace Splatter.AI.Tests {
         [Test]
         [TestCaseSource(nameof(GetNodes))]
         public void Decorator_Successful(Node node) {
-            var decorator = new SuccessDecorator("Decorator", Tree);
+            var decorator = new SuccessDecorator(Tree);
             decorator.Child = node;
 
             Assert.AreEqual(NodeResult.Success, decorator.Execute());
@@ -14,7 +14,7 @@ namespace Splatter.AI.Tests {
         [Test]
         [TestCaseSource(nameof(GetNodes))]
         public void Decorator_Failure(Node node) {
-            var decorator = new FailureDecorator("Decorator", Tree);
+            var decorator = new FailureDecorator(Tree);
             decorator.Child = node;
 
             Assert.AreEqual(NodeResult.Failure, decorator.Execute());
@@ -23,7 +23,7 @@ namespace Splatter.AI.Tests {
         [Test]
         [TestCaseSource(nameof(GetNodes))]
         public void Decorator_Running(Node node) {
-            var decorator = new RunningDecorator("Decorator", Tree);
+            var decorator = new RunningDecorator(Tree);
             decorator.Child = node;
 
             Assert.AreEqual(NodeResult.Running, decorator.Execute());
