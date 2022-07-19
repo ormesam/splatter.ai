@@ -11,8 +11,10 @@ namespace Splatter.AI {
             this.parent = parent;
         }
 
-        public void Abortable(AbortType abortType, Func<bool> condition) {
+        public ParallelBuilder<TParent> Abortable(AbortType abortType, Func<bool> condition) {
             parallel.SetAbortType(abortType, condition);
+
+            return this;
         }
 
         public void SetName(string name) {
