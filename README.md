@@ -8,7 +8,7 @@ To add to your Unity project go to the Package Manager, click the plus in the to
 
 1. Create new class deriving from BehaviourTree
 2. Override `Awake` method (optional) and initiate blackboard values, make sure to call `base.Awake();` at the start of the method
-3. Override `SetRoot` method, here you can build up your behaviour tree using the `BehaviourTreeBuilder` class as shown below
+3. Override `CreateRoot` method, here you can build up your behaviour tree using the `BehaviourTreeBuilder` class as shown below
 4. Attach the script to the GameObject
 5. The tree will be executed every frame
 
@@ -26,9 +26,10 @@ public class ZombieBehaviourTree : BehaviourTree {
         Blackboard[ZombieKey] = GetComponent<Zombie>();
     }
     
-    public override Node SetRoot() {
+    protected override Node CreateRoot() {
         return new BehaviourTreeBuilder(this)
-            .Sequence("root", resetIfInterrupted: false)
+            .Sequence()
+                .Name("root")
             	.Do("custom action", () => {
                     return NodeResult.Success;
                 })
