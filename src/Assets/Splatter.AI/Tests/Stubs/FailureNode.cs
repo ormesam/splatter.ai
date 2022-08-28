@@ -3,8 +3,14 @@
         public FailureNode(BehaviourTree tree) : base("Failure", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
             return NodeResult.Failure;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

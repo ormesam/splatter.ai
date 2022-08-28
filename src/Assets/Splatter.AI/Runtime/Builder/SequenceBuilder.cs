@@ -17,12 +17,6 @@ namespace Splatter.AI {
             return this;
         }
 
-        public SequenceBuilder<TParent> ResetIfInterrupted() {
-            sequencer.SetResetIfInterrupted(true);
-
-            return this;
-        }
-
         public void SetName(string name) {
             sequencer.Name = name;
         }

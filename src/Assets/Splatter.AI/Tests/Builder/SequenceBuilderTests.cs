@@ -51,17 +51,6 @@ namespace Splatter.AI.Tests {
             Assert.AreEqual(typeof(Sequencer), (ParentStub.Children.Single() as Composite).Children[1].GetType());
         }
 
-        [Test]
-        public void SequenceBuilder_ResetIfInterrupted() {
-            CreateBuilder()
-                .Name("Test")
-                .ResetIfInterrupted()
-                .Succeed()
-            .End();
-
-            Assert.AreEqual(true, (ParentStub.Children.Single() as Sequencer).ResetIfInterrupted);
-        }
-
         private SequenceBuilder<BehaviourTreeParentStub> CreateBuilder() {
             return new SequenceBuilder<BehaviourTreeParentStub>(ParentStub);
         }

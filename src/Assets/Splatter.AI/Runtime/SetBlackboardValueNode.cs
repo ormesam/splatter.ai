@@ -17,10 +17,16 @@
             this.value = value;
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
             Tree.Blackboard[key] = value;
 
             return NodeResult.Success;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

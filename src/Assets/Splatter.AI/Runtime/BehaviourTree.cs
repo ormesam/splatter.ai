@@ -7,25 +7,19 @@ namespace Splatter.AI {
     /// Override <see cref="Start"/> to initialise blackboard values. Override <see cref="CreateRoot"/> to create the tree root.
     /// </summary>
     public abstract class BehaviourTree : MonoBehaviour {
-        private Node root;
+        public Node Root;
 
         /// <summary>
         /// Dictionary for storing variables used in the behaviour tree.
         /// </summary>
         public IDictionary<string, object> Blackboard { get; private set; }
 
-        /// <summary>
-        /// Number of times the tree has been executed (every update) since start / reset.
-        /// </summary>
-        public int Ticks { get; private set; }
-
         protected virtual void Awake() {
             Blackboard = new Dictionary<string, object>();
-            Ticks = 0;
         }
 
         protected virtual void Start() {
-            root = CreateRoot();
+            Root = CreateRoot();
         }
 
         /// <summary>
@@ -35,9 +29,7 @@ namespace Splatter.AI {
         protected abstract Node CreateRoot();
 
         protected virtual void Update() {
-            root.Execute();
-
-            Ticks++;
+            Root.OnUpdate();
         }
 
         /// <summary>
@@ -47,19 +39,11 @@ namespace Splatter.AI {
         /// <param name="key">Item key</param>
         /// <returns>Item</returns>
         public T GetItem<T>(string key) {
+            if (!Blackboard.ContainsKey(key)) {
+                Debug.LogError($"Dictionary item not found with key: {key}");
+            }
+
             return (T)Blackboard[key];
         }
-
-#if UNITY_INCLUDE_TESTS
-        public void IncrementTick() {
-            Ticks++;
-        }
-#endif
-
-#if UNITY_EDITOR
-        public Node GetRoot() {
-            return root;
-        }
-#endif
     }
 }

@@ -16,8 +16,14 @@ namespace Splatter.AI {
             this.onExecute = onExecute;
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
             return onExecute();
+        }
+
+        protected override void OnStop() {
         }
     }
 }

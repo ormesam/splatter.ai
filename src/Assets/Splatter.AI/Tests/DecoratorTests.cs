@@ -8,7 +8,7 @@ namespace Splatter.AI.Tests {
             var decorator = new SuccessDecorator(Tree);
             decorator.Child = node;
 
-            Assert.AreEqual(NodeResult.Success, decorator.Execute());
+            Assert.AreEqual(NodeResult.Success, decorator.OnUpdate());
         }
 
         [Test]
@@ -17,7 +17,7 @@ namespace Splatter.AI.Tests {
             var decorator = new FailureDecorator(Tree);
             decorator.Child = node;
 
-            Assert.AreEqual(NodeResult.Failure, decorator.Execute());
+            Assert.AreEqual(NodeResult.Failure, decorator.OnUpdate());
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Splatter.AI.Tests {
             var decorator = new RunningDecorator(Tree);
             decorator.Child = node;
 
-            Assert.AreEqual(NodeResult.Running, decorator.Execute());
+            Assert.AreEqual(NodeResult.Running, decorator.OnUpdate());
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Splatter.AI.Tests {
             var decorator = new InvertDecorator(Tree);
             decorator.Child = CreateRunningNode();
 
-            Assert.AreEqual(NodeResult.Running, decorator.Execute());
+            Assert.AreEqual(NodeResult.Running, decorator.OnUpdate());
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Splatter.AI.Tests {
             var decorator = new InvertDecorator(Tree);
             decorator.Child = CreateFailureNode();
 
-            Assert.AreEqual(NodeResult.Success, decorator.Execute());
+            Assert.AreEqual(NodeResult.Success, decorator.OnUpdate());
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Splatter.AI.Tests {
             var decorator = new InvertDecorator(Tree);
             decorator.Child = CreateSuccessNode();
 
-            Assert.AreEqual(NodeResult.Failure, decorator.Execute());
+            Assert.AreEqual(NodeResult.Failure, decorator.OnUpdate());
         }
     }
 }

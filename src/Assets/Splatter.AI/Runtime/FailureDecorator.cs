@@ -3,10 +3,16 @@
         public FailureDecorator(BehaviourTree tree) : base("Always Fail", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
-            Child.Execute();
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
+            Child.OnUpdate();
 
             return NodeResult.Failure;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

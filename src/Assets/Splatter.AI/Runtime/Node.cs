@@ -3,9 +3,7 @@ namespace Splatter.AI {
     /// Base class for all nodes on a behaviour tree.
     /// </summary>
     public abstract class Node {
-#if UNITY_EDITOR
-        private int lastExecutedTick;
-#endif
+        public bool IsStarted { get; private set; }
 
         /// <summary>
         /// Node name
@@ -17,10 +15,7 @@ namespace Splatter.AI {
         /// </summary>
         protected BehaviourTree Tree { get; private set; }
 
-#if UNITY_EDITOR
-        public bool ExecutedLastTick => Tree.Ticks == lastExecutedTick + 1;
-        public NodeResult LastResult { get; private set; }
-#endif
+        public NodeResult Result { get; private set; } = NodeResult.Running;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
@@ -32,25 +27,39 @@ namespace Splatter.AI {
             Tree = tree;
         }
 
+        protected abstract void OnStart();
+
         /// <summary>
         /// Behaviour of the node.
         /// </summary>
         /// <returns>The result of the execution.</returns>
-        public NodeResult Execute() {
-            var result = ExecuteNode();
+        protected abstract NodeResult Update();
 
-#if UNITY_EDITOR
-            lastExecutedTick = Tree.Ticks;
-            LastResult = result;
-#endif
+        /// <summary>
+        /// Behaviour of the node.
+        /// </summary>
+        /// <returns>The result of the execution.</returns>
+        public NodeResult OnUpdate() {
+            if (!IsStarted) {
+                OnStart();
+                IsStarted = true;
+            }
 
-            return result;
+            Result = Update();
+
+            if (Result != NodeResult.Running) {
+                OnStop();
+                IsStarted = false;
+            }
+
+            return Result;
         }
 
-        /// <summary>
-        /// Behaviour of the node.
-        /// </summary>
-        /// <returns>The result of the execution.</returns>
-        protected abstract NodeResult ExecuteNode();
+        protected abstract void OnStop();
+
+        protected virtual void Abort() {
+            IsStarted = false;
+            OnStop();
+        }
     }
 }

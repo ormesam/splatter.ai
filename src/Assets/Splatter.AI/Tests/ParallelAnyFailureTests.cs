@@ -11,7 +11,7 @@ namespace Splatter.AI.Tests {
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, parallel.Execute());
+            Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace Splatter.AI.Tests {
                 CreateFailureNode(),
             };
 
-            Assert.AreEqual(NodeResult.Failure, parallel.Execute());
+            Assert.AreEqual(NodeResult.Failure, parallel.OnUpdate());
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Splatter.AI.Tests {
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, parallel.Execute());
+            Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Splatter.AI {
     /// </summary>
     public class WaitNode : Node {
         private readonly float? waitTime;
-        private float? existTime;
+        private float? exitTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WaitNode"/> class.
@@ -17,18 +17,21 @@ namespace Splatter.AI {
             this.waitTime = waitTime;
         }
 
-        protected override NodeResult ExecuteNode() {
-            if (existTime == null) {
-                existTime = Time.time + waitTime;
-            }
+        protected override void OnStart() {
+            exitTime = Time.time + waitTime;
+        }
 
-            if (Time.time >= existTime) {
-                existTime = null;
+        protected override NodeResult Update() {
+            if (Time.time >= exitTime) {
+                exitTime = null;
 
                 return NodeResult.Success;
             }
 
             return NodeResult.Running;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

@@ -65,11 +65,11 @@ namespace Splatter.AI.Editor {
 
             SetPortColour(Color.white);
 
-            if (!Node.ExecutedLastTick) {
+            if (!Node.IsStarted && Node.Result == NodeResult.Running) {
                 return;
             }
 
-            switch (Node.LastResult) {
+            switch (Node.Result) {
                 case NodeResult.Running:
                     AddToClassList("running");
                     SetPortColour(Color.yellow);

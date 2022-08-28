@@ -35,7 +35,7 @@ namespace Splatter.AI.Editor {
             column = 0;
             DeleteElements(graphElements.ToList());
 
-            CreateNodes(null, tree.GetRoot(), 0, false);
+            CreateNodes(null, tree.Root, 0, false);
 
             ConnectNodes();
             DrawNodes();

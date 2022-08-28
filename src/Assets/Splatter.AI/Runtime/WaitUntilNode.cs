@@ -16,8 +16,14 @@ namespace Splatter.AI {
             this.condition = condition;
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
             return condition() ? NodeResult.Success : NodeResult.Running;
+        }
+
+        protected override void OnStop() {
         }
     }
 }
