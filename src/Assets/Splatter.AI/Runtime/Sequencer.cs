@@ -19,6 +19,8 @@ namespace Splatter.AI {
 
         protected override NodeResult Update() {
             if (CanAbortSelf && !Condition()) {
+                Abort();
+
                 return NodeResult.Failure;
             }
 
@@ -30,7 +32,6 @@ namespace Splatter.AI {
                 if (result == NodeResult.Running) {
                     return NodeResult.Running;
                 } else if (result == NodeResult.Failure) {
-                    CurrentNodeIdx = 0;
                     return NodeResult.Failure;
                 } else {
                     CurrentNodeIdx++;
@@ -38,7 +39,6 @@ namespace Splatter.AI {
                     if (CurrentNodeIdx < Children.Count) {
                         return NodeResult.Running;
                     } else {
-                        CurrentNodeIdx = 0;
                         return NodeResult.Success;
                     }
                 }
@@ -49,10 +49,5 @@ namespace Splatter.AI {
 
         protected override void OnStop() {
         }
-
-#if UNITY_INCLUDE_TESTS
-        // Useful for debugging tests
-        public int CurrentIndex => CurrentNodeIdx;
-#endif
     }
 }

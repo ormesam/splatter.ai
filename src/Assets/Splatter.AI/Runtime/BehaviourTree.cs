@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,6 +45,28 @@ namespace Splatter.AI {
             }
 
             return (T)Blackboard[key];
+        }
+
+        public static void Traverse(Node node, Action<Node> visitor) {
+            visitor.Invoke(node);
+
+            var children = GetChildren(node);
+
+            foreach (var child in children) {
+                Traverse(child, visitor);
+            }
+        }
+
+        public static IList<Node> GetChildren(Node parent) {
+            if (parent is Decorator decorator && decorator.Child != null) {
+                return new List<Node>() { decorator.Child };
+            }
+
+            if (parent is Composite composite) {
+                return composite.Children;
+            }
+
+            return new List<Node>();
         }
     }
 }
