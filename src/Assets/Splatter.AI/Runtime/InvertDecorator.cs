@@ -3,8 +3,11 @@
         public InvertDecorator(BehaviourTree tree) : base("Inverter", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
-            var result = Child.Execute();
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
+            var result = Child.OnUpdate();
 
             switch (result) {
                 case NodeResult.Failure:
@@ -14,6 +17,9 @@
                 default:
                     return NodeResult.Running;
             }
+        }
+
+        protected override void OnStop() {
         }
     }
 }

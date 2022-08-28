@@ -62,26 +62,25 @@ namespace Splatter.AI.Editor {
             RemoveFromClassList("running");
             RemoveFromClassList("failure");
             RemoveFromClassList("success");
-
             SetPortColour(Color.white);
 
-            if (!Node.ExecutedLastTick) {
-                return;
-            }
-
-            switch (Node.LastResult) {
-                case NodeResult.Running:
-                    AddToClassList("running");
-                    SetPortColour(Color.yellow);
-                    break;
-                case NodeResult.Failure:
-                    AddToClassList("failure");
-                    SetPortColour(Color.red);
-                    break;
-                case NodeResult.Success:
-                    AddToClassList("success");
-                    SetPortColour(Color.green);
-                    break;
+            if (Application.isPlaying) {
+                switch (Node.Result) {
+                    case NodeResult.Running:
+                        if (Node.IsStarted) {
+                            AddToClassList("running");
+                            SetPortColour(Color.yellow);
+                        }
+                        break;
+                    case NodeResult.Failure:
+                        AddToClassList("failure");
+                        SetPortColour(Color.red);
+                        break;
+                    case NodeResult.Success:
+                        AddToClassList("success");
+                        SetPortColour(Color.green);
+                        break;
+                }
             }
         }
 

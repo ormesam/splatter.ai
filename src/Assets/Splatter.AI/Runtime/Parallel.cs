@@ -19,13 +19,16 @@ namespace Splatter.AI {
             this.mode = mode;
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
             IList<NodeResult> results = new List<NodeResult>();
 
             CurrentNodeIdx = 0;
 
             foreach (var child in Children) {
-                var result = child.Execute();
+                var result = child.OnUpdate();
                 results.Add(result);
 
                 if (result == NodeResult.Running) {
@@ -57,6 +60,9 @@ namespace Splatter.AI {
             }
 
             return NodeResult.Running;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

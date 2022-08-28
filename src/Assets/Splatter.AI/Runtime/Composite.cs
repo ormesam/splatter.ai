@@ -49,12 +49,19 @@ namespace Splatter.AI {
         /// Update index if a higher priority task has interrupted.
         /// </summary>
         protected void UpdateCurrentIdxIfInterrupted() {
-            for (int i = 0; i < CurrentNodeIdx; i++) {
-                if (CanInterrupt(Children[i] as Composite)) {
-                    CurrentNodeIdx = i;
-                    return;
+            bool isAborted = false;
+            int idx = CurrentNodeIdx;
+
+            for (int i = 0; i < CurrentNodeIdx + 1; i++) {
+                if (!isAborted && CanInterrupt(Children[i] as Composite)) {
+                    idx = i;
+                    isAborted = true;
+                } else if (isAborted) {
+                    Children[i].Abort();
                 }
             }
+
+            CurrentNodeIdx = idx;
         }
 
         private bool CanInterrupt(Composite composite) {

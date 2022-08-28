@@ -3,10 +3,16 @@
         public SuccessDecorator(BehaviourTree tree) : base("Always Succeed", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
-            Child.Execute();
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
+            Child.OnUpdate();
 
             return NodeResult.Success;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

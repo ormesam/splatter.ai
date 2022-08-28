@@ -8,9 +8,9 @@ namespace Splatter.AI.Tests {
             Leaf successLeaf = new Leaf("Leaf", Tree, () => NodeResult.Success);
             Leaf failureLeaf = new Leaf("Leaf", Tree, () => NodeResult.Failure);
 
-            Assert.AreEqual(NodeResult.Running, runningLeaf.Execute());
-            Assert.AreEqual(NodeResult.Success, successLeaf.Execute());
-            Assert.AreEqual(NodeResult.Failure, failureLeaf.Execute());
+            Assert.AreEqual(NodeResult.Running, runningLeaf.OnUpdate());
+            Assert.AreEqual(NodeResult.Success, successLeaf.OnUpdate());
+            Assert.AreEqual(NodeResult.Failure, failureLeaf.OnUpdate());
         }
     }
 }

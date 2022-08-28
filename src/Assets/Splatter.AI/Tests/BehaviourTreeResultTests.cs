@@ -4,17 +4,17 @@ namespace Splatter.AI.Tests {
     public class BehaviourTreeResultTests : TestBase {
         [Test]
         public void BehaviourTree_SuccessNode() {
-            Assert.AreEqual(NodeResult.Success, CreateSuccessNode().Execute());
+            Assert.AreEqual(NodeResult.Success, CreateSuccessNode().OnUpdate());
         }
 
         [Test]
         public void BehaviourTree_FailureNode() {
-            Assert.AreEqual(NodeResult.Failure, CreateFailureNode().Execute());
+            Assert.AreEqual(NodeResult.Failure, CreateFailureNode().OnUpdate());
         }
 
         [Test]
         public void BehaviourTree_RunningNode() {
-            Assert.AreEqual(NodeResult.Running, CreateRunningNode().Execute());
+            Assert.AreEqual(NodeResult.Running, CreateRunningNode().OnUpdate());
         }
     }
 }

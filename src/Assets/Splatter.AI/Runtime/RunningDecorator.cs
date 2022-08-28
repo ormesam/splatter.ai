@@ -3,10 +3,16 @@
         public RunningDecorator(BehaviourTree tree) : base("Always Running", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
-            Child.Execute();
+        protected override void OnStart() {
+        }
+
+        protected override NodeResult Update() {
+            Child.OnUpdate();
 
             return NodeResult.Running;
+        }
+
+        protected override void OnStop() {
         }
     }
 }

@@ -13,7 +13,11 @@ namespace Splatter.AI {
             : base("Selector", tree) {
         }
 
-        protected override NodeResult ExecuteNode() {
+        protected override void OnStart() {
+            CurrentNodeIdx = 0;
+        }
+
+        protected override NodeResult Update() {
             if (CanAbortSelf && !Condition()) {
                 return NodeResult.Failure;
             }
@@ -21,12 +25,11 @@ namespace Splatter.AI {
             UpdateCurrentIdxIfInterrupted();
 
             if (CurrentNodeIdx < Children.Count) {
-                var result = Children[CurrentNodeIdx].Execute();
+                var result = Children[CurrentNodeIdx].OnUpdate();
 
                 if (result == NodeResult.Running) {
                     return NodeResult.Running;
                 } else if (result == NodeResult.Success) {
-                    CurrentNodeIdx = 0;
                     return NodeResult.Success;
                 } else {
                     CurrentNodeIdx++;
@@ -34,7 +37,6 @@ namespace Splatter.AI {
                     if (CurrentNodeIdx < Children.Count) {
                         return NodeResult.Running;
                     } else {
-                        CurrentNodeIdx = 0;
                         return NodeResult.Failure;
                     }
                 }
@@ -43,9 +45,7 @@ namespace Splatter.AI {
             return NodeResult.Failure;
         }
 
-#if UNITY_INCLUDE_TESTS
-        // Useful for debugging tests
-        public int CurrentIndex => CurrentNodeIdx;
-#endif
+        protected override void OnStop() {
+        }
     }
 }
