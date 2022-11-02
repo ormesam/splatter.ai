@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 namespace Splatter.AI.Examples {
-    public class PatrollingBehaviourTree : BehaviourTree {
+    public class PatrollingBehaviourTree : ContextBehaviourTree<PatrolContext> {
         public GameObject[] Waypoints;
         public GameObject Player;
         public float MaxDistance;
@@ -10,8 +10,9 @@ namespace Splatter.AI.Examples {
         protected override void Awake() {
             base.Awake();
 
-            // Cache values
-            Blackboard.Add("CurrentWaypointIdx", 0);
+            Context = new PatrolContext {
+                CurrentWaypointIdx = 0,
+            };
         }
 
         protected override Node CreateRoot() {
@@ -33,7 +34,7 @@ namespace Splatter.AI.Examples {
                         .Sequence()
                             .Name("Patrol")
                             .Do("Set next waypoint", () => {
-                                int currentWaypointIdx = GetItem<int>("CurrentWaypointIdx");
+                                int currentWaypointIdx = Context.CurrentWaypointIdx;
                                 var navMeshAgent = GetComponent<NavMeshAgent>();
 
                                 currentWaypointIdx++;
@@ -42,7 +43,7 @@ namespace Splatter.AI.Examples {
                                     currentWaypointIdx = 0;
                                 }
 
-                                Blackboard["CurrentWaypointIdx"] = currentWaypointIdx;
+                                Context.CurrentWaypointIdx = currentWaypointIdx;
 
                                 navMeshAgent.SetDestination(Waypoints[currentWaypointIdx].transform.position);
 

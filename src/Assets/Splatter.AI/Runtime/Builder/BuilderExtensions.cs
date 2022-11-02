@@ -77,7 +77,7 @@ namespace Splatter.AI {
         /// <param name="name">Node name</param>
         /// <param name="seconds">Seconds to wait</param>
         public static T Wait<T>(this T builder, string name, float seconds) where T : IBuilder {
-            builder.AddNode(new WaitNode(name, builder.Tree, seconds));
+            builder.AddNode(new WaitNode(name, builder.Tree, seconds, seconds));
 
             return builder;
         }
@@ -89,7 +89,7 @@ namespace Splatter.AI {
         /// <param name="minSeconds">Minimum number of seconds to wait</param>
         /// <param name="maxSeconds">Maximum number of seconds to wait</param>
         public static T Wait<T>(this T builder, string name, float minSeconds, float maxSeconds) where T : IBuilder {
-            builder.AddNode(new WaitNode(name, builder.Tree, UnityEngine.Random.Range(minSeconds, maxSeconds)));
+            builder.AddNode(new WaitNode(name, builder.Tree, minSeconds, maxSeconds));
 
             return builder;
         }
