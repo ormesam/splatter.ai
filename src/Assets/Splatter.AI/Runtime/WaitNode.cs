@@ -5,26 +5,28 @@ namespace Splatter.AI {
     /// Wait for x number of seconds before returning <see cref="NodeResult.Success"/>.
     /// </summary>
     public class WaitNode : Node {
-        private readonly float? waitTime;
-        private float? exitTime;
+        private float minSeconds;
+        private float maxSeconds;
+        private float exitTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WaitNode"/> class.
         /// </summary>
+        /// <param name="name">Node name</param>
         /// <param name="tree">Behaviour tree</param>
-        /// <param name="waitTime">Seconds to wait</param>
-        public WaitNode(string name, BehaviourTree tree, float waitTime) : base(name, tree) {
-            this.waitTime = waitTime;
+        /// <param name="minSeconds">Seconds to wait</param>
+        /// <param name="maxSeconds">Seconds to wait</param>
+        public WaitNode(string name, BehaviourTree tree, float minSeconds, float maxSeconds) : base(name, tree) {
+            this.minSeconds = minSeconds;
+            this.maxSeconds = maxSeconds;
         }
 
         protected override void OnStart() {
-            exitTime = Time.time + waitTime;
+            exitTime = Time.time + Random.Range(minSeconds, maxSeconds);
         }
 
         protected override NodeResult Update() {
             if (Time.time >= exitTime) {
-                exitTime = null;
-
                 return NodeResult.Success;
             }
 
