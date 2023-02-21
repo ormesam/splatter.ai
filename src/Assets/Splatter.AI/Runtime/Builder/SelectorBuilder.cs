@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Splatter.AI {
     public class SelectorBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
@@ -8,6 +7,11 @@ namespace Splatter.AI {
 
         public SelectorBuilder(TParent parent) : base(parent.Tree) {
             this.selector = new Selector(parent.Tree);
+            this.parent = parent;
+        }
+
+        public SelectorBuilder(TParent parent, Selector selector) : base(parent.Tree) {
+            this.selector = selector;
             this.parent = parent;
         }
 
@@ -22,7 +26,7 @@ namespace Splatter.AI {
         }
 
         public TParent End() {
-            if (!selector.Children.Any()) {
+            if (selector.Children.Count == 0) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 

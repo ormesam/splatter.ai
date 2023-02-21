@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Splatter.AI {
     public class SequenceBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
@@ -8,6 +7,11 @@ namespace Splatter.AI {
 
         public SequenceBuilder(TParent parent) : base(parent.Tree) {
             this.sequencer = new Sequencer(parent.Tree);
+            this.parent = parent;
+        }
+
+        public SequenceBuilder(TParent parent, Sequencer sequencer) : base(parent.Tree) {
+            this.sequencer = sequencer;
             this.parent = parent;
         }
 
@@ -22,7 +26,7 @@ namespace Splatter.AI {
         }
 
         public TParent End() {
-            if (!sequencer.Children.Any()) {
+            if (sequencer.Children.Count == 0) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 

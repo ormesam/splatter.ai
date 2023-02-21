@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Splatter.AI {
     public class ParallelBuilder<TParent> : BuilderBase, IBuilder where TParent : IBuilder {
@@ -8,6 +7,11 @@ namespace Splatter.AI {
 
         public ParallelBuilder(TParent parent, ParallelMode mode) : base(parent.Tree) {
             this.parallel = new Parallel(parent.Tree, mode);
+            this.parent = parent;
+        }
+
+        public ParallelBuilder(TParent parent, Parallel parallel) : base(parent.Tree) {
+            this.parallel = parallel;
             this.parent = parent;
         }
 
@@ -22,7 +26,7 @@ namespace Splatter.AI {
         }
 
         public TParent End() {
-            if (!parallel.Children.Any()) {
+            if (parallel.Children.Count == 0) {
                 throw new InvalidOperationException("Composite node does not have any children.");
             }
 
