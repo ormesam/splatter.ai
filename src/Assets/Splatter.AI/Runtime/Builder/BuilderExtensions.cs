@@ -8,6 +8,13 @@ namespace Splatter.AI {
         public static SequenceBuilder<T> Sequence<T>(this T builder) where T : IBuilder {
             return new SequenceBuilder<T>(builder);
         }
+        /// <summary>
+        /// Adds sequence composite to the behaviour tree.
+        /// </summary>
+        /// <param name="sequencer">Sequencer to use</param>
+        public static SequenceBuilder<T> Sequence<T>(this T builder, Sequencer sequencer) where T : IBuilder {
+            return new SequenceBuilder<T>(builder, sequencer);
+        }
 
         /// <summary>
         /// Adds selector composite to the behaviour tree.
@@ -17,10 +24,26 @@ namespace Splatter.AI {
         }
 
         /// <summary>
+        /// Adds selector composite to the behaviour tree.
+        /// </summary>
+        /// <param name="selector">Selector to use</param>
+        public static SelectorBuilder<T> Selector<T>(this T builder, Selector selector) where T : IBuilder {
+            return new SelectorBuilder<T>(builder, selector);
+        }
+
+        /// <summary>
         /// Adds parallel composite to the behaviour tree.
         /// </summary>
         public static ParallelBuilder<T> Parallel<T>(this T builder, ParallelMode mode) where T : IBuilder {
             return new ParallelBuilder<T>(builder, mode);
+        }
+
+        /// <summary>
+        /// Adds parallel composite to the behaviour tree.
+        /// </summary>
+        /// <param name="parallel">Parallel to use</param>
+        public static ParallelBuilder<T> Parallel<T>(this T builder, Parallel parallel) where T : IBuilder {
+            return new ParallelBuilder<T>(builder, parallel);
         }
 
         /// <summary>
