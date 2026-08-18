@@ -2,7 +2,7 @@ using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class TestBase {
-        protected static BehaviourTree Tree = new BehaviourTreeStub();
+        protected static readonly BehaviourTree Tree = new BehaviourTree();
 
         protected static Node CreateSuccessNode() {
             return new SuccessNode(Tree);

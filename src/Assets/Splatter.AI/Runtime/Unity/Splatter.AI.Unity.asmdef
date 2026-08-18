@@ -1,7 +1,9 @@
 {
-    "name": "Splatter.AI",
+    "name": "Splatter.AI.Unity",
     "rootNamespace": "Splatter.AI",
-    "references": [],
+    "references": [
+        "Splatter.AI"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -10,5 +12,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

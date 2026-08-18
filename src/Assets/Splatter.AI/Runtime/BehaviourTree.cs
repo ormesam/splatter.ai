@@ -1,36 +1,31 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Splatter.AI {
     /// <summary>
-    /// Base class for behaviour trees.</para>
-    /// Override <see cref="Start"/> to initialise blackboard values. Override <see cref="CreateRoot"/> to create the tree root.
+    /// A behaviour tree. Assign <see cref="Root"/>, then call <see cref="Tick"/> each update.
     /// </summary>
-    public abstract class BehaviourTree : MonoBehaviour {
-        public Node Root;
+    public class BehaviourTree {
+        /// <summary>
+        /// Root node of the behaviour tree.
+        /// </summary>
+        public Node Root { get; set; }
 
         /// <summary>
         /// Dictionary for storing variables used in the behaviour tree.
         /// </summary>
-        public IDictionary<string, object> Blackboard { get; private set; }
-
-        protected virtual void Awake() {
-            Blackboard = new Dictionary<string, object>();
-        }
-
-        protected virtual void Start() {
-            Root = CreateRoot();
-        }
+        public IDictionary<string, object> Blackboard { get; } = new Dictionary<string, object>();
 
         /// <summary>
-        /// Creates the root of the behaviour tree.
+        /// Updates the tree by one tick.
         /// </summary>
-        /// <returns>Behaviour tree root</returns>
-        protected abstract Node CreateRoot();
+        /// <returns>The result of the root node's execution.</returns>
+        public NodeResult Tick() {
+            if (Root == null) {
+                throw new InvalidOperationException("Tree has no root");
+            }
 
-        protected virtual void Update() {
-            Root.OnUpdate();
+            return Root.OnUpdate();
         }
 
         /// <summary>
@@ -40,11 +35,11 @@ namespace Splatter.AI {
         /// <param name="key">Item key</param>
         /// <returns>Item</returns>
         public T GetItem<T>(string key) {
-            if (!Blackboard.ContainsKey(key)) {
-                Debug.LogError($"Dictionary item not found with key: {key}");
+            if (!Blackboard.TryGetValue(key, out var value)) {
+                throw new KeyNotFoundException($"Blackboard item not found with key: {key}");
             }
 
-            return (T)Blackboard[key];
+            return (T)value;
         }
 
         public static void Traverse(Node node, Action<Node> visitor) {

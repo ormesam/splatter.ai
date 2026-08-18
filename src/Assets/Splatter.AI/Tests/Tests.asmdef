@@ -6,7 +6,9 @@
         "UnityEditor.TestRunner",
         "Splatter.AI"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
