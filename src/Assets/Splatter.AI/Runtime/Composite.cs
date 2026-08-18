@@ -52,7 +52,7 @@ namespace Splatter.AI {
             bool isAborted = false;
             int idx = CurrentNodeIdx;
 
-            for (int i = 0; i < CurrentNodeIdx + 1; i++) {
+            for (int i = 0; i < CurrentNodeIdx + 1 && i < Children.Count; i++) {
                 if (!isAborted && CanInterrupt(Children[i] as Composite)) {
                     idx = i;
                     isAborted = true;

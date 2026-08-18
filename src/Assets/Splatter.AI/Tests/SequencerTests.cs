@@ -3,6 +3,13 @@ using NUnit.Framework;
 namespace Splatter.AI.Tests {
     public class SequencerTests : TestBase {
         [Test]
+        public void Sequencer_NoChildren() {
+            Sequencer sequencer = new Sequencer(Tree);
+
+            Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
+        }
+
+        [Test]
         public void Sequencer_Success() {
             Sequencer sequencer = new Sequencer(Tree);
             sequencer.Children = new[] {

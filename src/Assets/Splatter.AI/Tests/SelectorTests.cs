@@ -4,6 +4,13 @@ using Splatter.AI.Tests.Stubs;
 namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
         [Test]
+        public void Selector_NoChildren() {
+            Selector selector = new Selector(Tree);
+
+            Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
+        }
+
+        [Test]
         public void Selector_Abort_Self_StopsRunningChild() {
             bool condition = true;
 
