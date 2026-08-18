@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
@@ -26,7 +27,6 @@ namespace Splatter.AI.Tests {
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
 
             selector.Children = new[] {
@@ -35,8 +35,6 @@ namespace Splatter.AI.Tests {
                 CreateSuccessNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
         }
 
@@ -49,8 +47,6 @@ namespace Splatter.AI.Tests {
                 CreateFailureNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
         }
 
@@ -58,14 +54,35 @@ namespace Splatter.AI.Tests {
         public void Selector_Running() {
             Selector selector = new Selector(Tree);
             selector.Children = new[] {
-                CreateRunningNode(),
-                CreateRunningNode(),
+                CreateFailureNode(),
+                CreateFailureNode(),
                 CreateRunningNode(),
             };
 
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
+        }
+
+        [Test]
+        public void Selector_ResumesAtRunningChild() {
+            var secondResult = NodeResult.Running;
+
+            var first = new TrackingNode(Tree, () => NodeResult.Failure);
+            var second = new TrackingNode(Tree, () => secondResult);
+            var third = new TrackingNode(Tree, () => NodeResult.Success);
+
+            Selector selector = new Selector(Tree);
+            selector.Children = new Node[] { first, second, third };
+
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
+
+            secondResult = NodeResult.Failure;
+
+            Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
+
+            Assert.AreEqual(1, first.Updates);
+            Assert.AreEqual(3, second.Updates);
+            Assert.AreEqual(1, third.Updates);
         }
     }
 }

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 
 namespace Splatter.AI.Tests {
-    public class ParallelAnyComplitionTests : TestBase {
+    public class ParallelAnyCompletionTests : TestBase {
         [Test]
         public void Parallel_Success() {
             Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyCompletion);

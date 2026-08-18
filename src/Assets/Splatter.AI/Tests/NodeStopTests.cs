@@ -35,5 +35,24 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(1, node.Stops);
         }
+
+        [Test]
+        public void Stop_CompletedNode_OnStopSeesFinalResult() {
+            var node = new TrackingNode(Tree, () => NodeResult.Success);
+
+            node.OnUpdate();
+
+            Assert.AreEqual(NodeResult.Success, node.ResultAtLastStop);
+        }
+
+        [Test]
+        public void Stop_InterruptedNode_OnStopSeesRunningResult() {
+            var node = new TrackingNode(Tree, () => NodeResult.Running);
+
+            node.OnUpdate();
+            node.Stop();
+
+            Assert.AreEqual(NodeResult.Running, node.ResultAtLastStop);
+        }
     }
 }

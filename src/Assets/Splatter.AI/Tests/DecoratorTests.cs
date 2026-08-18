@@ -83,6 +83,36 @@ namespace Splatter.AI.Tests {
         }
 
         [Test]
+        public void Decorator_Running_CompletedChild_IsNotRestarted() {
+            var child = new TrackingNode(Tree, () => NodeResult.Success);
+
+            var decorator = new RunningDecorator(Tree);
+            decorator.Child = child;
+
+            Assert.AreEqual(NodeResult.Running, decorator.OnUpdate());
+            Assert.AreEqual(NodeResult.Running, decorator.OnUpdate());
+
+            Assert.AreEqual(1, child.Starts);
+            Assert.AreEqual(1, child.Updates);
+        }
+
+        [Test]
+        public void Decorator_Running_AfterStop_RunsChildAgain() {
+            var child = new TrackingNode(Tree, () => NodeResult.Success);
+
+            var decorator = new RunningDecorator(Tree);
+            decorator.Child = child;
+
+            decorator.OnUpdate();
+            decorator.Stop();
+
+            Assert.AreEqual(NodeResult.Running, decorator.OnUpdate());
+
+            Assert.AreEqual(2, child.Starts);
+            Assert.AreEqual(2, child.Updates);
+        }
+
+        [Test]
         public void Invert_Running() {
             var decorator = new InvertDecorator(Tree);
             decorator.Child = CreateRunningNode();

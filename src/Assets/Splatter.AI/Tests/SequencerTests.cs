@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class SequencerTests : TestBase {
@@ -18,8 +19,6 @@ namespace Splatter.AI.Tests {
                 CreateSuccessNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
         }
 
@@ -32,8 +31,6 @@ namespace Splatter.AI.Tests {
                 CreateFailureNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
 
             sequencer.Children = new[] {
@@ -42,7 +39,6 @@ namespace Splatter.AI.Tests {
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
 
             sequencer.Children = new[] {
@@ -58,28 +54,35 @@ namespace Splatter.AI.Tests {
         public void Sequencer_Running() {
             Sequencer sequencer = new Sequencer(Tree);
             sequencer.Children = new[] {
-                CreateRunningNode(),
-                CreateRunningNode(),
-                CreateRunningNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-
-            sequencer.Children = new[] {
-                CreateSuccessNode(),
-                CreateRunningNode(),
-                CreateRunningNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-
-            sequencer.Children = new[] {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
             };
 
             Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
+        }
+
+        [Test]
+        public void Sequencer_ResumesAtRunningChild() {
+            var secondResult = NodeResult.Running;
+
+            var first = new TrackingNode(Tree, () => NodeResult.Success);
+            var second = new TrackingNode(Tree, () => secondResult);
+            var third = new TrackingNode(Tree, () => NodeResult.Success);
+
+            Sequencer sequencer = new Sequencer(Tree);
+            sequencer.Children = new Node[] { first, second, third };
+
+            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
+            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
+
+            secondResult = NodeResult.Success;
+
+            Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
+
+            Assert.AreEqual(1, first.Updates);
+            Assert.AreEqual(3, second.Updates);
+            Assert.AreEqual(1, third.Updates);
         }
     }
 }

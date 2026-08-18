@@ -55,6 +55,10 @@ namespace Splatter.AI {
             return Result;
         }
 
+        /// <summary>
+        /// Called when the node stops, either by completing or by being interrupted via <see cref="Stop"/>.
+        /// <see cref="Result"/> holds the final result on completion, or <see cref="NodeResult.Running"/> when interrupted.
+        /// </summary>
         protected abstract void OnStop();
 
         public void Stop() {
@@ -64,8 +68,8 @@ namespace Splatter.AI {
                 }
 
                 node.IsStarted = false;
-                node.Result = NodeResult.Running;
                 node.OnStop();
+                node.Result = NodeResult.Running;
             });
         }
     }

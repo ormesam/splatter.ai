@@ -18,22 +18,18 @@ namespace Splatter.AI {
         }
 
         protected override NodeResult Update() {
-            if (CurrentNodeIdx < Children.Count) {
+            while (CurrentNodeIdx < Children.Count) {
                 var result = Children[CurrentNodeIdx].OnUpdate();
 
                 if (result == NodeResult.Running) {
                     return NodeResult.Running;
-                } else if (result == NodeResult.Success) {
-                    return NodeResult.Success;
-                } else {
-                    CurrentNodeIdx++;
-
-                    if (CurrentNodeIdx < Children.Count) {
-                        return NodeResult.Running;
-                    } else {
-                        return NodeResult.Failure;
-                    }
                 }
+
+                if (result == NodeResult.Success) {
+                    return NodeResult.Success;
+                }
+
+                CurrentNodeIdx++;
             }
 
             return NodeResult.Failure;
