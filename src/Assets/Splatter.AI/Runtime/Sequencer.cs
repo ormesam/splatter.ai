@@ -19,7 +19,7 @@ namespace Splatter.AI {
 
         protected override NodeResult Update() {
             if (CanAbortSelf && !Condition()) {
-                Abort();
+                AbortChildren();
 
                 return NodeResult.Failure;
             }

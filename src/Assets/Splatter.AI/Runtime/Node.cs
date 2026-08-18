@@ -59,6 +59,10 @@ namespace Splatter.AI {
 
         public virtual void Abort() {
             BehaviourTree.Traverse(this, (node) => {
+                if (!node.IsStarted) {
+                    return;
+                }
+
                 node.IsStarted = false;
                 node.Result = NodeResult.Running;
                 node.OnStop();

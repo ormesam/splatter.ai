@@ -64,6 +64,12 @@ namespace Splatter.AI {
             CurrentNodeIdx = idx;
         }
 
+        protected void AbortChildren() {
+            foreach (var child in Children) {
+                child.Abort();
+            }
+        }
+
         private bool CanInterrupt(Composite composite) {
             if (composite == null) {
                 return false;

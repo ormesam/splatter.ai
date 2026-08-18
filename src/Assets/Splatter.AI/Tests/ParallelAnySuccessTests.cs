@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class ParallelAnySuccessTests : TestBase {
@@ -12,6 +13,19 @@ namespace Splatter.AI.Tests {
             };
 
             Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+        }
+
+        [Test]
+        public void Parallel_Success_AbortsRunningChildren() {
+            var running = new TrackingNode(Tree, () => NodeResult.Running);
+
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
+            parallel.Children = new Node[] { running, CreateSuccessNode() };
+
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+
+            Assert.AreEqual(1, running.Stops);
+            Assert.IsFalse(running.IsStarted);
         }
 
         [Test]

@@ -20,7 +20,8 @@ namespace Splatter.AI {
         /// </summary>
         WaitForAllToComplete,
         /// <summary>
-        /// Returns <see cref="NodeResult.Success"/> if all children have succeeded.
+        /// Returns <see cref="NodeResult.Success"/> once all children have succeeded,
+        /// or <see cref="NodeResult.Failure"/> as soon as a child fails.
         /// </summary>
         WaitForAllToSucceed,
     }

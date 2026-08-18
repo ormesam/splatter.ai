@@ -1,7 +1,26 @@
 using NUnit.Framework;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
+        [Test]
+        public void Selector_Abort_Self_StopsRunningChild() {
+            bool condition = true;
+
+            var child = new TrackingNode(Tree, () => NodeResult.Running);
+
+            Selector selector = new Selector(Tree);
+            selector.SetAbortType(AbortType.Self, () => condition);
+            selector.Children = new Node[] { child };
+
+            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
+            condition = false;
+            Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
+
+            Assert.AreEqual(1, child.Stops);
+            Assert.IsFalse(child.IsStarted);
+        }
+
         [Test]
         public void Selector_Success() {
             Selector selector = new Selector(Tree);

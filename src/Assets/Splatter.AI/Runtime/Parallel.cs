@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Splatter.AI {
     /// <summary>
-    /// Executes all children in order each update, until the <see cref="ParallelMode"/> condition is met.
+    /// Executes all children each update, until the <see cref="ParallelMode"/> condition is met.
+    /// Children that complete are not updated again until the parallel node restarts. Any children
+    /// still running when the parallel node completes are aborted.
     /// </summary>
     public class Parallel : Composite {
         private readonly ParallelMode mode;
+        private NodeResult[] childResults;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parallel"/> class.
@@ -20,49 +20,75 @@ namespace Splatter.AI {
         }
 
         protected override void OnStart() {
+            ResetChildResults();
         }
 
         protected override NodeResult Update() {
-            IList<NodeResult> results = new List<NodeResult>();
+            if (CanAbortSelf && !Condition()) {
+                AbortChildren();
 
-            CurrentNodeIdx = 0;
+                return NodeResult.Failure;
+            }
 
-            foreach (var child in Children) {
-                var result = child.OnUpdate();
-                results.Add(result);
+            if (childResults.Length != Children.Count) {
+                ResetChildResults();
+            }
+
+            bool allComplete = true;
+            bool allSucceeded = true;
+
+            for (int i = 0; i < Children.Count; i++) {
+                var result = childResults[i];
 
                 if (result == NodeResult.Running) {
-                    continue;
+                    result = Children[i].OnUpdate();
+                    childResults[i] = result;
                 }
 
                 if (result == NodeResult.Success) {
                     if (mode == ParallelMode.ExitOnAnySuccess || mode == ParallelMode.ExitOnAnyCompletion) {
+                        AbortChildren();
+
                         return NodeResult.Success;
                     }
-                }
+                } else if (result == NodeResult.Failure) {
+                    allSucceeded = false;
 
-                if (result == NodeResult.Failure) {
-                    if (mode == ParallelMode.ExitOnAnyFailure || mode == ParallelMode.ExitOnAnyCompletion) {
+                    if (mode == ParallelMode.ExitOnAnyFailure
+                        || mode == ParallelMode.ExitOnAnyCompletion
+                        || mode == ParallelMode.WaitForAllToSucceed) {
+                        AbortChildren();
+
                         return NodeResult.Failure;
                     }
+                } else {
+                    allComplete = false;
+                    allSucceeded = false;
                 }
-
-                CurrentNodeIdx++;
             }
 
-            // Wait for all children to complete
-            if (mode == ParallelMode.WaitForAllToComplete) {
-                return results.All(i => i != NodeResult.Running) ? NodeResult.Success : NodeResult.Running;
+            if (mode == ParallelMode.WaitForAllToComplete && allComplete) {
+                return NodeResult.Success;
             }
 
-            if (mode == ParallelMode.WaitForAllToSucceed) {
-                return results.All(i => i == NodeResult.Success) ? NodeResult.Success : NodeResult.Running;
+            if (mode == ParallelMode.WaitForAllToSucceed && allSucceeded) {
+                return NodeResult.Success;
             }
 
             return NodeResult.Running;
         }
 
         protected override void OnStop() {
+        }
+
+        private void ResetChildResults() {
+            if (childResults == null || childResults.Length != Children.Count) {
+                childResults = new NodeResult[Children.Count];
+            }
+
+            for (int i = 0; i < childResults.Length; i++) {
+                childResults[i] = NodeResult.Running;
+            }
         }
     }
 }

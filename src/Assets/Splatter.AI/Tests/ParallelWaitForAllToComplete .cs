@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class ParallelWaitForAllToComplete : TestBase {
@@ -36,6 +37,41 @@ namespace Splatter.AI.Tests {
             };
 
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
+        }
+
+        [Test]
+        public void Parallel_CompletedChildren_AreNotUpdatedAgain() {
+            var secondResult = NodeResult.Running;
+
+            var completed = new TrackingNode(Tree, () => NodeResult.Success);
+            var running = new TrackingNode(Tree, () => secondResult);
+
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
+            parallel.Children = new Node[] { completed, running };
+
+            Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
+            Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
+
+            secondResult = NodeResult.Success;
+
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+
+            Assert.AreEqual(1, completed.Starts);
+            Assert.AreEqual(1, completed.Updates);
+            Assert.AreEqual(3, running.Updates);
+        }
+
+        [Test]
+        public void Parallel_Restart_UpdatesChildrenAgain() {
+            var child = new TrackingNode(Tree, () => NodeResult.Success);
+
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
+            parallel.Children = new Node[] { child };
+
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+
+            Assert.AreEqual(2, child.Updates);
         }
     }
 }
