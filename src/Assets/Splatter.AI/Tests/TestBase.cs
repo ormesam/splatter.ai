@@ -23,5 +23,12 @@ namespace Splatter.AI.Tests {
                 CreateRunningNode(),
             };
         }
+
+        protected static Node[] GetCompletedNodes() {
+            return new[]{
+                CreateSuccessNode(),
+                CreateFailureNode(),
+            };
+        }
     }
 }

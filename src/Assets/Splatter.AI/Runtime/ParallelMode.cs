@@ -4,11 +4,13 @@ namespace Splatter.AI {
     /// </summary>
     public enum ParallelMode {
         /// <summary>
-        /// Returns <see cref="NodeResult.Success"/> as soon as a child succeeds.
+        /// Returns <see cref="NodeResult.Success"/> as soon as a child succeeds,
+        /// or <see cref="NodeResult.Failure"/> once all children have completed without succeeding.
         /// </summary>
         ExitOnAnySuccess,
         /// <summary>
-        /// Returns <see cref="NodeResult.Failure"/> as soon as a child fails.
+        /// Returns <see cref="NodeResult.Failure"/> as soon as a child fails,
+        /// or <see cref="NodeResult.Success"/> once all children have completed without failing.
         /// </summary>
         ExitOnAnyFailure,
         /// <summary>

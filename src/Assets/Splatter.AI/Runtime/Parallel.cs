@@ -29,7 +29,6 @@ namespace Splatter.AI {
             }
 
             bool allComplete = true;
-            bool allSucceeded = true;
 
             for (int i = 0; i < Children.Count; i++) {
                 var result = childResults[i];
@@ -46,8 +45,6 @@ namespace Splatter.AI {
                         return NodeResult.Success;
                     }
                 } else if (result == NodeResult.Failure) {
-                    allSucceeded = false;
-
                     if (mode == ParallelMode.ExitOnAnyFailure
                         || mode == ParallelMode.ExitOnAnyCompletion
                         || mode == ParallelMode.WaitForAllToSucceed) {
@@ -57,16 +54,13 @@ namespace Splatter.AI {
                     }
                 } else {
                     allComplete = false;
-                    allSucceeded = false;
                 }
             }
 
-            if (mode == ParallelMode.WaitForAllToComplete && allComplete) {
-                return NodeResult.Success;
-            }
-
-            if (mode == ParallelMode.WaitForAllToSucceed && allSucceeded) {
-                return NodeResult.Success;
+            if (allComplete) {
+                // Results that would exit early were returned inside the loop, so all children
+                // completing means none of them met this mode's exit condition.
+                return mode == ParallelMode.ExitOnAnySuccess ? NodeResult.Failure : NodeResult.Success;
             }
 
             return NodeResult.Running;

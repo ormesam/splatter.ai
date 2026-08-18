@@ -37,5 +37,24 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
         }
+
+        [Test]
+        public void Parallel_AllChildrenSucceed_ReturnsSuccess() {
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyFailure);
+            parallel.Children = new[] {
+                CreateSuccessNode(),
+                CreateSuccessNode(),
+                CreateSuccessNode(),
+            };
+
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+        }
+
+        [Test]
+        public void Parallel_NoChildren_ReturnsSuccess() {
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyFailure);
+
+            Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
+        }
     }
 }

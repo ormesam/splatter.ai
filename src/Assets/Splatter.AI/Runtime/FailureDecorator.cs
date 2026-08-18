@@ -1,4 +1,8 @@
 ﻿namespace Splatter.AI {
+    /// <summary>
+    /// Returns <see cref="NodeResult.Failure"/> when the child completes, regardless of its result.
+    /// Returns <see cref="NodeResult.Running"/> while the child is running.
+    /// </summary>
     public class FailureDecorator : Decorator {
         public FailureDecorator(BehaviourTree tree) : base("Always Fail", tree) {
         }
@@ -7,9 +11,9 @@
         }
 
         protected override NodeResult Update() {
-            Child.OnUpdate();
+            var result = Child.OnUpdate();
 
-            return NodeResult.Failure;
+            return result == NodeResult.Running ? NodeResult.Running : NodeResult.Failure;
         }
 
         protected override void OnStop() {
