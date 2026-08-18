@@ -18,14 +18,6 @@ namespace Splatter.AI {
         }
 
         protected override NodeResult Update() {
-            if (CanAbortSelf && !Condition()) {
-                AbortChildren();
-
-                return NodeResult.Failure;
-            }
-
-            UpdateCurrentIdxIfInterrupted();
-
             if (CurrentNodeIdx < Children.Count) {
                 var result = Children[CurrentNodeIdx].OnUpdate();
 

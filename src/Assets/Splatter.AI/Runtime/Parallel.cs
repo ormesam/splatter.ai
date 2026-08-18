@@ -2,7 +2,7 @@ namespace Splatter.AI {
     /// <summary>
     /// Executes all children each update, until the <see cref="ParallelMode"/> condition is met.
     /// Children that complete are not updated again until the parallel node restarts. Any children
-    /// still running when the parallel node completes are aborted.
+    /// still running when the parallel node completes are stopped.
     /// </summary>
     public class Parallel : Composite {
         private readonly ParallelMode mode;
@@ -24,12 +24,6 @@ namespace Splatter.AI {
         }
 
         protected override NodeResult Update() {
-            if (CanAbortSelf && !Condition()) {
-                AbortChildren();
-
-                return NodeResult.Failure;
-            }
-
             if (childResults.Length != Children.Count) {
                 ResetChildResults();
             }
@@ -47,7 +41,7 @@ namespace Splatter.AI {
 
                 if (result == NodeResult.Success) {
                     if (mode == ParallelMode.ExitOnAnySuccess || mode == ParallelMode.ExitOnAnyCompletion) {
-                        AbortChildren();
+                        StopChildren();
 
                         return NodeResult.Success;
                     }
@@ -57,7 +51,7 @@ namespace Splatter.AI {
                     if (mode == ParallelMode.ExitOnAnyFailure
                         || mode == ParallelMode.ExitOnAnyCompletion
                         || mode == ParallelMode.WaitForAllToSucceed) {
-                        AbortChildren();
+                        StopChildren();
 
                         return NodeResult.Failure;
                     }

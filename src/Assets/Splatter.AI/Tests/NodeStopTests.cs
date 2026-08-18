@@ -1,37 +1,37 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
-    public class NodeAbortTests : TestBase {
+    public class NodeStopTests : TestBase {
         [Test]
-        public void Abort_StartedNode_Stops() {
+        public void Stop_StartedNode_Stops() {
             var node = new TrackingNode(Tree, () => NodeResult.Running);
 
             node.OnUpdate();
-            node.Abort();
+            node.Stop();
 
             Assert.AreEqual(1, node.Stops);
             Assert.IsFalse(node.IsStarted);
         }
 
         [Test]
-        public void Abort_NotStartedNode_DoesNotStop() {
+        public void Stop_NotStartedNode_DoesNotStop() {
             var node = new TrackingNode(Tree, () => NodeResult.Running);
 
-            node.Abort();
+            node.Stop();
 
             Assert.AreEqual(0, node.Stops);
         }
 
         [Test]
-        public void Abort_CompletedNode_DoesNotStopAgain() {
+        public void Stop_CompletedNode_DoesNotStopAgain() {
             var node = new TrackingNode(Tree, () => NodeResult.Success);
 
             node.OnUpdate();
 
             Assert.AreEqual(1, node.Stops);
 
-            node.Abort();
+            node.Stop();
 
             Assert.AreEqual(1, node.Stops);
         }

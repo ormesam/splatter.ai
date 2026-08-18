@@ -16,7 +16,7 @@ namespace Splatter.AI.Tests {
         }
 
         [Test]
-        public void Parallel_Success_AbortsRunningChildren() {
+        public void Parallel_Success_StopsRunningChildren() {
             var running = new TrackingNode(Tree, () => NodeResult.Running);
 
             Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
