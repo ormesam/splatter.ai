@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Splatter.AI.Tests.Stubs {
-    public class BehaviourTreeParentStub : IBuilder {
+    public class BehaviourTreeParentStub {
         public BehaviourTree Tree => new BehaviourTreeStub();
         public IList<Node> Children = new List<Node>();
         public string Name { get; set; }
