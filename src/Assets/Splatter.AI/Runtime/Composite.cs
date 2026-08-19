@@ -26,8 +26,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Composite"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree</param>
-        public Composite(string name, BehaviourTree tree) : base(name, tree) {
+        /// <param name="name">Node name</param>
+        public Composite(string name) : base(name) {
         }
 
         /// <summary>

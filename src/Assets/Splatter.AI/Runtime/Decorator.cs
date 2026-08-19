@@ -11,8 +11,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Decorator"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree</param>
-        public Decorator(string name, BehaviourTree tree) : base(name, tree) {
+        /// <param name="name">Node name</param>
+        public Decorator(string name) : base(name) {
         }
     }
 }

@@ -2,18 +2,16 @@ using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class TestBase {
-        protected static readonly BehaviourTree Tree = new BehaviourTree();
-
         protected static Node CreateSuccessNode() {
-            return new SuccessNode(Tree);
+            return new SuccessNode();
         }
 
         protected static Node CreateFailureNode() {
-            return new FailureNode(Tree);
+            return new FailureNode();
         }
 
         protected static Node CreateRunningNode() {
-            return new RunningNode(Tree);
+            return new RunningNode();
         }
 
         protected static Node[] GetNodes() {

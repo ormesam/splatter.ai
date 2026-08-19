@@ -1,6 +1,6 @@
 ﻿namespace Splatter.AI {
     public class InvertDecorator : Decorator {
-        public InvertDecorator(BehaviourTree tree) : base("Inverter", tree) {
+        public InvertDecorator() : base("Inverter") {
         }
 
         protected override void OnStart() {

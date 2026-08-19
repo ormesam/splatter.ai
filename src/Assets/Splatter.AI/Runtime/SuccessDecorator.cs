@@ -4,7 +4,7 @@
     /// Returns <see cref="NodeResult.Running"/> while the child is running.
     /// </summary>
     public class SuccessDecorator : Decorator {
-        public SuccessDecorator(BehaviourTree tree) : base("Always Succeed", tree) {
+        public SuccessDecorator() : base("Always Succeed") {
         }
 
         protected override void OnStart() {

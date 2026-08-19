@@ -9,7 +9,7 @@ namespace Splatter.AI.Tests.Stubs {
         public int Stops { get; private set; }
         public NodeResult ResultAtLastStop { get; private set; }
 
-        public TrackingNode(BehaviourTree tree, Func<NodeResult> onUpdate) : base("Tracking", tree) {
+        public TrackingNode(Func<NodeResult> onUpdate) : base("Tracking") {
             this.onUpdate = onUpdate;
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Splatter.AI.Tests.Stubs {
     public class RunningNode : Node {
-        public RunningNode(BehaviourTree tree) : base("Running", tree) {
+        public RunningNode() : base("Running") {
         }
 
         protected override void OnStart() {

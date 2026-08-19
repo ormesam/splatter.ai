@@ -7,7 +7,7 @@ namespace Splatter.AI.Tests {
         [Test]
         public void Tick_ReturnsRootResult() {
             var tree = new BehaviourTree();
-            tree.Root = new Leaf("Leaf", tree, () => NodeResult.Success);
+            tree.Root = new Leaf("Leaf", () => NodeResult.Success);
 
             Assert.AreEqual(NodeResult.Success, tree.Tick());
         }

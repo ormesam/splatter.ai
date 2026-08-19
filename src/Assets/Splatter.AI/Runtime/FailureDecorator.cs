@@ -4,7 +4,7 @@
     /// Returns <see cref="NodeResult.Running"/> while the child is running.
     /// </summary>
     public class FailureDecorator : Decorator {
-        public FailureDecorator(BehaviourTree tree) : base("Always Fail", tree) {
+        public FailureDecorator() : base("Always Fail") {
         }
 
         protected override void OnStart() {

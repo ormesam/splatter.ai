@@ -4,7 +4,7 @@ namespace Splatter.AI.Tests {
     public class ParallelAnyCompletionTests : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyCompletion) {
+            Parallel parallel = new Parallel(ParallelMode.ExitOnAnyCompletion) {
                 CreateRunningNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
@@ -15,7 +15,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyCompletion) {
+            Parallel parallel = new Parallel(ParallelMode.ExitOnAnyCompletion) {
                 CreateRunningNode(),
                 CreateRunningNode(),
                 CreateFailureNode(),
@@ -26,7 +26,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnyCompletion) {
+            Parallel parallel = new Parallel(ParallelMode.ExitOnAnyCompletion) {
                 CreateRunningNode(),
                 CreateRunningNode(),
                 CreateRunningNode(),

@@ -6,7 +6,7 @@
     public class RunningDecorator : Decorator {
         private bool childCompleted;
 
-        public RunningDecorator(BehaviourTree tree) : base("Always Running", tree) {
+        public RunningDecorator() : base("Always Running") {
         }
 
         protected override void OnStart() {

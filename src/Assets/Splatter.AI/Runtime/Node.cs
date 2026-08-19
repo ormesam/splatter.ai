@@ -10,21 +10,14 @@ namespace Splatter.AI {
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Behaviour tree this node is on.
-        /// </summary>
-        protected BehaviourTree Tree { get; private set; }
-
         public NodeResult Result { get; private set; } = NodeResult.Running;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree this node is on.</param>
-        public Node(string name, BehaviourTree tree) {
+        /// <param name="name">Node name</param>
+        public Node(string name) {
             this.Name = name;
-
-            Tree = tree;
         }
 
         protected abstract void OnStart();

@@ -10,9 +10,9 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Leaf"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree</param>
+        /// <param name="name">Node name</param>
         /// <param name="onExecute">Function to run on execution</param>
-        public Leaf(string name, BehaviourTree tree, Func<NodeResult> onExecute) : base(name, tree) {
+        public Leaf(string name, Func<NodeResult> onExecute) : base(name) {
             this.onExecute = onExecute;
         }
 

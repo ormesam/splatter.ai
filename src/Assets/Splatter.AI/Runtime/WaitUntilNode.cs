@@ -10,9 +10,9 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="WaitUntilNode"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree</param>
+        /// <param name="name">Node name</param>
         /// <param name="condition">Condition to evaluate</param>
-        public WaitUntilNode(string name, BehaviourTree tree, Func<bool> condition) : base(name, tree) {
+        public WaitUntilNode(string name, Func<bool> condition) : base(name) {
             this.condition = condition;
         }
 

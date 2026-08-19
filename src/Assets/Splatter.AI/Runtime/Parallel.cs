@@ -11,10 +11,9 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
-        /// <param name="tree">Behaviour tree</param>
         /// <param name="mode">Parallel mode</param>
-        public Parallel(BehaviourTree tree, ParallelMode mode)
-            : base("Parallel", tree) {
+        public Parallel(ParallelMode mode)
+            : base("Parallel") {
 
             this.mode = mode;
         }

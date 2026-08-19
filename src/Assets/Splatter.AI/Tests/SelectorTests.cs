@@ -5,14 +5,14 @@ namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
         [Test]
         public void Selector_NoChildren() {
-            Selector selector = new Selector(Tree);
+            Selector selector = new Selector();
 
             Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
         }
 
         [Test]
         public void Selector_Success() {
-            Selector selector = new Selector(Tree) {
+            Selector selector = new Selector() {
                 CreateSuccessNode(),
                 CreateRunningNode(),
                 CreateRunningNode(),
@@ -20,7 +20,7 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
 
-            selector = new Selector(Tree) {
+            selector = new Selector() {
                 CreateFailureNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
@@ -28,7 +28,7 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
 
-            selector = new Selector(Tree) {
+            selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateSuccessNode(),
@@ -39,7 +39,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Selector_Failed() {
-            Selector selector = new Selector(Tree) {
+            Selector selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -50,7 +50,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Selector_Running() {
-            Selector selector = new Selector(Tree) {
+            Selector selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateRunningNode(),
@@ -63,11 +63,11 @@ namespace Splatter.AI.Tests {
         public void Selector_ResumesAtRunningChild() {
             var secondResult = NodeResult.Running;
 
-            var first = new TrackingNode(Tree, () => NodeResult.Failure);
-            var second = new TrackingNode(Tree, () => secondResult);
-            var third = new TrackingNode(Tree, () => NodeResult.Success);
+            var first = new TrackingNode(() => NodeResult.Failure);
+            var second = new TrackingNode(() => secondResult);
+            var third = new TrackingNode(() => NodeResult.Success);
 
-            Selector selector = new Selector(Tree) { first, second, third };
+            Selector selector = new Selector() { first, second, third };
 
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());

@@ -7,10 +7,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Sequencer"/> class.
         /// </summary>
-        /// <param name="name">Node name</param>
-        /// <param name="tree">Behaviour tree</param>
-        public Sequencer(BehaviourTree tree)
-            : base("Sequence", tree) {
+        public Sequencer()
+            : base("Sequence") {
         }
 
         protected override void OnStart() {

@@ -13,10 +13,9 @@ namespace Splatter.AI {
         /// Initializes a new instance of the <see cref="WaitNode"/> class.
         /// </summary>
         /// <param name="name">Node name</param>
-        /// <param name="tree">Behaviour tree</param>
         /// <param name="minSeconds">Seconds to wait</param>
         /// <param name="maxSeconds">Seconds to wait</param>
-        public WaitNode(string name, BehaviourTree tree, float minSeconds, float maxSeconds) : base(name, tree) {
+        public WaitNode(string name, float minSeconds, float maxSeconds) : base(name) {
             this.minSeconds = minSeconds;
             this.maxSeconds = maxSeconds;
         }

@@ -5,7 +5,7 @@ namespace Splatter.AI.Tests {
     public class NodeStopTests : TestBase {
         [Test]
         public void Stop_StartedNode_Stops() {
-            var node = new TrackingNode(Tree, () => NodeResult.Running);
+            var node = new TrackingNode(() => NodeResult.Running);
 
             node.OnUpdate();
             node.Stop();
@@ -16,7 +16,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Stop_NotStartedNode_DoesNotStop() {
-            var node = new TrackingNode(Tree, () => NodeResult.Running);
+            var node = new TrackingNode(() => NodeResult.Running);
 
             node.Stop();
 
@@ -25,7 +25,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Stop_CompletedNode_DoesNotStopAgain() {
-            var node = new TrackingNode(Tree, () => NodeResult.Success);
+            var node = new TrackingNode(() => NodeResult.Success);
 
             node.OnUpdate();
 
@@ -38,7 +38,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Stop_CompletedNode_OnStopSeesFinalResult() {
-            var node = new TrackingNode(Tree, () => NodeResult.Success);
+            var node = new TrackingNode(() => NodeResult.Success);
 
             node.OnUpdate();
 
@@ -47,7 +47,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Stop_InterruptedNode_OnStopSeesRunningResult() {
-            var node = new TrackingNode(Tree, () => NodeResult.Running);
+            var node = new TrackingNode(() => NodeResult.Running);
 
             node.OnUpdate();
             node.Stop();

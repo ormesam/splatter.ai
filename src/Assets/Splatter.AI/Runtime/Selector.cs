@@ -7,10 +7,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="Selector"/> class.
         /// </summary>
-        /// <param name="name">Node name</param>
-        /// <param name="tree">Behaviour tree</param>
-        public Selector(BehaviourTree tree)
-            : base("Selector", tree) {
+        public Selector()
+            : base("Selector") {
         }
 
         protected override void OnStart() {
