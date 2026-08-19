@@ -1,14 +1,22 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Splatter.AI {
     /// <summary>
     /// Node with multiple children.
     /// </summary>
-    public abstract class Composite : Node {
+    public abstract class Composite : Node, IEnumerable<Node> {
+        private readonly List<Node> children = new List<Node>();
+
         /// <summary>
         /// Children of the composite node.
         /// </summary>
-        public IList<Node> Children { get; set; }
+        protected IReadOnlyList<Node> Children => children;
+
+        /// <summary>
+        /// Number of children.
+        /// </summary>
+        public int Count => children.Count;
 
         /// <summary>
         /// Index of the node to be executed.
@@ -20,11 +28,22 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="tree">Behaviour tree</param>
         public Composite(string name, BehaviourTree tree) : base(name, tree) {
-            Children = new List<Node>();
         }
 
+        /// <summary>
+        /// Adds a child to the composite.
+        /// </summary>
+        /// <param name="node">Child node</param>
+        public void Add(Node node) {
+            children.Add(node);
+        }
+
+        public IEnumerator<Node> GetEnumerator() => children.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
         protected void StopChildren() {
-            foreach (var child in Children) {
+            foreach (var child in children) {
                 child.Stop();
             }
         }

@@ -5,8 +5,7 @@ namespace Splatter.AI.Tests {
     public class ParallelAnySuccessTests : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
                 CreateFailureNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
@@ -19,8 +18,10 @@ namespace Splatter.AI.Tests {
         public void Parallel_Success_StopsRunningChildren() {
             var running = new TrackingNode(Tree, () => NodeResult.Running);
 
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new Node[] { running, CreateSuccessNode() };
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
+                running,
+                CreateSuccessNode(),
+            };
 
             Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
 
@@ -30,8 +31,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
                 CreateRunningNode(),
                 CreateRunningNode(),
                 CreateFailureNode(),
@@ -42,8 +42,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_AllChildrenFail_ReturnsFailure() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -57,8 +56,10 @@ namespace Splatter.AI.Tests {
             var secondResult = NodeResult.Running;
             var second = new TrackingNode(Tree, () => secondResult);
 
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new Node[] { CreateFailureNode(), second };
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
+                CreateFailureNode(),
+                second,
+            };
 
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
 
@@ -76,8 +77,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.ExitOnAnySuccess) {
                 CreateRunningNode(),
                 CreateRunningNode(),
                 CreateRunningNode(),

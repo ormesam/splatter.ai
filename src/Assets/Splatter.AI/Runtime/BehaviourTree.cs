@@ -52,16 +52,16 @@ namespace Splatter.AI {
             }
         }
 
-        public static IList<Node> GetChildren(Node parent) {
+        public static IEnumerable<Node> GetChildren(Node parent) {
             if (parent is Decorator decorator && decorator.Child != null) {
-                return new List<Node>() { decorator.Child };
+                return new[] { decorator.Child };
             }
 
             if (parent is Composite composite) {
-                return composite.Children;
+                return composite;
             }
 
-            return new List<Node>();
+            return Array.Empty<Node>();
         }
     }
 }

@@ -5,8 +5,7 @@ namespace Splatter.AI.Tests {
     public class ParallelWaitForAllToComplete : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete) {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -17,8 +16,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete) {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateFailureNode(),
@@ -29,8 +27,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete) {
                 CreateSuccessNode(),
                 CreateRunningNode(),
                 CreateFailureNode(),
@@ -46,8 +43,10 @@ namespace Splatter.AI.Tests {
             var completed = new TrackingNode(Tree, () => NodeResult.Success);
             var running = new TrackingNode(Tree, () => secondResult);
 
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
-            parallel.Children = new Node[] { completed, running };
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete) {
+                completed,
+                running,
+            };
 
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
@@ -65,8 +64,7 @@ namespace Splatter.AI.Tests {
         public void Parallel_Restart_UpdatesChildrenAgain() {
             var child = new TrackingNode(Tree, () => NodeResult.Success);
 
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete);
-            parallel.Children = new Node[] { child };
+            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToComplete) { child };
 
             Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
             Assert.AreEqual(NodeResult.Success, parallel.OnUpdate());
