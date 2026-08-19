@@ -1,7 +1,11 @@
 namespace Splatter.AI {
     /// <summary>
-    /// Always returns <see cref="NodeResult.Running"/> until all children succeed. 
+    /// Always returns <see cref="NodeResult.Running"/> until all children succeed.
     /// If a child fails, <see cref="NodeResult.Failure"/> is returned.
+    /// This sequence has memory: it resumes at the running child each update and does not
+    /// re-evaluate earlier children, so completed steps run exactly once per pass.
+    /// Use <see cref="ReactiveSequencer"/> if earlier children should be re-checked every
+    /// update and be able to interrupt a later running child.
     /// </summary>
     public class Sequencer : Composite {
         /// <summary>
