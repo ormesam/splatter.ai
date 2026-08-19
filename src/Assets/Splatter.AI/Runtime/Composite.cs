@@ -43,8 +43,16 @@ namespace Splatter.AI {
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         protected void StopChildren() {
-            foreach (var child in children) {
-                child.Stop();
+            StopChildren(0);
+        }
+
+        /// <summary>
+        /// Stops children at or after the given index.
+        /// </summary>
+        /// <param name="fromIndex">Index of the first child to stop</param>
+        protected void StopChildren(int fromIndex) {
+            for (int i = fromIndex; i < children.Count; i++) {
+                children[i].Stop();
             }
         }
     }
