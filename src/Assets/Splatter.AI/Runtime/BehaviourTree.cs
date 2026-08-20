@@ -61,6 +61,10 @@ namespace Splatter.AI {
                 return composite;
             }
 
+            if (parent is SubtreeNode subtree && subtree.Tree?.Root != null) {
+                return new[] { subtree.Tree.Root };
+            }
+
             return Array.Empty<Node>();
         }
     }
