@@ -6,15 +6,25 @@ namespace Splatter.AI {
     /// A behaviour tree. Assign <see cref="Root"/>, then call <see cref="Tick"/> each update.
     /// </summary>
     public class BehaviourTree {
+        private Node root;
+        private bool isValidated;
+
         /// <summary>
         /// Root node of the behaviour tree.
         /// </summary>
-        public Node Root { get; set; }
+        public Node Root {
+            get => root;
+            set {
+                root = value;
+                isValidated = false;
+            }
+        }
 
         /// <summary>
-        /// Dictionary for storing variables used in the behaviour tree.
+        /// Dictionary for storing variables used in the behaviour tree. Notifies per-key
+        /// observers when a value actually changes.
         /// </summary>
-        public IDictionary<string, object> Blackboard { get; } = new Dictionary<string, object>();
+        public Blackboard Blackboard { get; } = new Blackboard();
 
         /// <summary>
         /// Updates the tree by one tick.
@@ -25,7 +35,19 @@ namespace Splatter.AI {
                 throw new InvalidOperationException("Tree has no root");
             }
 
+            if (!isValidated) {
+                Validate();
+                isValidated = true;
+            }
+
             return Root.OnUpdate();
+        }
+
+        /// <summary>
+        /// Stops all running nodes and ends every observation, including inside subtrees.
+        /// </summary>
+        public void Stop() {
+            Root?.Stop();
         }
 
         /// <summary>
@@ -40,6 +62,30 @@ namespace Splatter.AI {
             }
 
             return (T)value;
+        }
+
+        private void Validate() {
+            if (Root is ObservingDecorator rootObserver && rootObserver.StopsLowerPriority) {
+                throw MisplacedObserver(rootObserver);
+            }
+
+            Traverse(Root, (node) => {
+                foreach (var child in GetChildren(node)) {
+                    if (child is ObservingDecorator observer && observer.StopsLowerPriority
+                        && !(node is Selector || node is Sequencer)) {
+
+                        throw MisplacedObserver(observer);
+                    }
+                }
+            });
+        }
+
+        private static InvalidOperationException MisplacedObserver(ObservingDecorator observer) {
+            return new InvalidOperationException(
+                $"'{observer.Name}' uses AbortMode.{observer.Mode} but is not a direct child of a " +
+                "Selector or Sequencer, so its lower-priority aborts would never be applied. " +
+                "Move it to the top of a memory composite branch, or use AbortMode.Self, a " +
+                "GuardDecorator, or a reactive composite instead.");
         }
 
         public static void Traverse(Node node, Action<Node> visitor) {

@@ -55,5 +55,33 @@ namespace Splatter.AI {
                 children[i].Stop();
             }
         }
+
+        /// <summary>
+        /// Applies a pending lower-priority abort from an already-passed observing child,
+        /// stopping later children and rewinding <see cref="CurrentNodeIdx"/> to the observer.
+        /// The lowest index (highest priority) wins.
+        /// </summary>
+        protected void ApplyObserverAborts() {
+            for (int i = 0; i < CurrentNodeIdx && i < children.Count; i++) {
+                if (children[i] is ObservingDecorator observer && observer.ShouldAbortLowerPriority()) {
+                    StopChildren(i + 1);
+                    CurrentNodeIdx = i;
+
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ends observation on observing children when this composite stops, so
+        /// lower-priority observers don't outlive the composite that scopes them.
+        /// </summary>
+        protected void CancelObservers() {
+            for (int i = 0; i < children.Count; i++) {
+                if (children[i] is ObservingDecorator observer) {
+                    observer.CancelObservation();
+                }
+            }
+        }
     }
 }

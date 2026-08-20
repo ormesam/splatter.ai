@@ -5,6 +5,8 @@ namespace Splatter.AI {
     /// Runs the child only while the condition is true, returning the child's result.
     /// The condition is re-evaluated every update: if it becomes false while the child is
     /// running, the child is stopped and <see cref="NodeResult.Failure"/> is returned.
+    /// For an event-driven alternative that re-checks only when an observed value actually
+    /// changes, see <see cref="ObservingDecorator"/>.
     /// </summary>
     public class GuardDecorator : Decorator {
         private readonly Func<bool> condition;

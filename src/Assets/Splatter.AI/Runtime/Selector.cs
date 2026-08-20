@@ -5,7 +5,9 @@ namespace Splatter.AI {
     /// This selector has memory: it resumes at the running child each update and does not
     /// re-evaluate earlier children, so a chosen branch runs to completion once picked.
     /// Use <see cref="ReactiveSelector"/> if higher-priority children should be re-checked
-    /// every update and be able to interrupt a later running child.
+    /// every update and be able to interrupt a later running child, or make a higher-priority
+    /// child an <see cref="ObservingDecorator"/> with <see cref="AbortMode.LowerPriority"/> to
+    /// interrupt only when an observed value actually changes.
     /// </summary>
     public class Selector : Composite {
         /// <summary>
@@ -20,6 +22,8 @@ namespace Splatter.AI {
         }
 
         protected override NodeResult Update() {
+            ApplyObserverAborts();
+
             while (CurrentNodeIdx < Children.Count) {
                 var result = Children[CurrentNodeIdx].OnUpdate();
 
@@ -38,6 +42,7 @@ namespace Splatter.AI {
         }
 
         protected override void OnStop() {
+            CancelObservers();
         }
     }
 }
