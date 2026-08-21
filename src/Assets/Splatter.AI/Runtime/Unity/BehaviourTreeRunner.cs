@@ -37,6 +37,7 @@ namespace Splatter.AI {
 
         protected virtual void Awake() {
             Tree = CreateTree();
+            Tree.Name = gameObject.name;
         }
 
         protected virtual void Start() {

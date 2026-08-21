@@ -19,9 +19,10 @@ namespace Splatter.AI {
         public int Count => children.Count;
 
         /// <summary>
-        /// Index of the node to be executed.
+        /// Index of the node to be executed. Readable by debugging tools; for randomised
+        /// composites this is progress through the shuffled order, not a child index.
         /// </summary>
-        protected int CurrentNodeIdx = 0;
+        public int CurrentNodeIdx { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Composite"/> class.

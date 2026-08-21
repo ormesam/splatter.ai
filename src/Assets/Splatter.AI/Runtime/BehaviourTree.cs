@@ -27,6 +27,11 @@ namespace Splatter.AI {
         public Blackboard Blackboard { get; } = new Blackboard();
 
         /// <summary>
+        /// Optional display name used by debugging tools such as the behaviour tree viewer.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Updates the tree by one tick.
         /// </summary>
         /// <returns>The result of the root node's execution.</returns>

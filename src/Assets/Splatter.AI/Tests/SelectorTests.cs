@@ -80,5 +80,18 @@ namespace Splatter.AI.Tests {
             Assert.AreEqual(3, second.Updates);
             Assert.AreEqual(1, third.Updates);
         }
+
+        [Test]
+        public void Selector_CurrentNodeIdx_TracksActiveChild() {
+            Selector selector = new Selector() {
+                CreateFailureNode(),
+                CreateFailureNode(),
+                CreateRunningNode(),
+            };
+
+            selector.OnUpdate();
+
+            Assert.AreEqual(2, selector.CurrentNodeIdx);
+        }
     }
 }

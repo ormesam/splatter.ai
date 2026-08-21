@@ -27,6 +27,19 @@ namespace Splatter.AI {
         public int Count => entries.Count;
 
         /// <summary>
+        /// Currently registered trees, in registration order.
+        /// </summary>
+        public IEnumerable<BehaviourTree> Trees {
+            get {
+                for (int i = 0; i < entries.Count; i++) {
+                    if (entries[i].IsRegistered) {
+                        yield return entries[i].Tree;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Registers a tree to be ticked by <see cref="Tick"/>. Registering an already registered
         /// tree updates its interval.
         /// </summary>

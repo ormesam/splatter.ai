@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Splatter.AI {
@@ -9,6 +10,12 @@ namespace Splatter.AI {
     public static class BehaviourTreeManager {
         private static BehaviourTreeScheduler scheduler = new BehaviourTreeScheduler();
         private static Driver driver;
+
+        /// <summary>
+        /// Trees currently registered with the manager, in registration order. Read by editor
+        /// tooling such as the behaviour tree viewer.
+        /// </summary>
+        public static IEnumerable<BehaviourTree> Trees => scheduler.Trees;
 
         /// <summary>
         /// Registers a tree to be ticked centrally. Registering an already registered tree

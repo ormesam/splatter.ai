@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Splatter.AI.Tests.Stubs;
 
@@ -144,6 +145,72 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(2, nodeA.Updates);
             Assert.AreEqual(0, nodeB.Updates);
+        }
+
+        [Test]
+        public void Scheduler_Trees_EmptyInitially() {
+            var scheduler = new BehaviourTreeScheduler();
+
+            CollectionAssert.IsEmpty(scheduler.Trees);
+        }
+
+        [Test]
+        public void Scheduler_Trees_ListsRegisteredTreesInOrder() {
+            var scheduler = new BehaviourTreeScheduler();
+            var treeA = CreateTrackingTree(out _);
+            var treeB = CreateTrackingTree(out _);
+
+            scheduler.Register(treeA);
+            scheduler.Register(treeB);
+
+            CollectionAssert.AreEqual(new[] { treeA, treeB }, scheduler.Trees);
+        }
+
+        [Test]
+        public void Scheduler_Trees_ExcludesUnregisteredTree() {
+            var scheduler = new BehaviourTreeScheduler();
+            var treeA = CreateTrackingTree(out _);
+            var treeB = CreateTrackingTree(out _);
+
+            scheduler.Register(treeA);
+            scheduler.Register(treeB);
+            scheduler.Unregister(treeA);
+
+            CollectionAssert.AreEqual(new[] { treeB }, scheduler.Trees);
+        }
+
+        [Test]
+        public void Scheduler_Trees_RegisterAgain_DoesNotDuplicate() {
+            var scheduler = new BehaviourTreeScheduler();
+            var tree = CreateTrackingTree(out _);
+
+            scheduler.Register(tree, 2);
+            scheduler.Register(tree, 5);
+
+            CollectionAssert.AreEqual(new[] { tree }, scheduler.Trees);
+        }
+
+        [Test]
+        public void Scheduler_Trees_ExcludesTreeUnregisteredDuringTick() {
+            BehaviourTreeScheduler scheduler = null;
+            BehaviourTree tree = null;
+            bool seenDuringTick = true;
+
+            var node = new TrackingNode(() => {
+                scheduler.Unregister(tree);
+                seenDuringTick = scheduler.Trees.Contains(tree);
+
+                return NodeResult.Running;
+            });
+
+            tree = new BehaviourTree { Root = node };
+            scheduler = new BehaviourTreeScheduler();
+            scheduler.Register(tree);
+
+            scheduler.Tick();
+
+            Assert.IsFalse(seenDuringTick);
+            CollectionAssert.IsEmpty(scheduler.Trees);
         }
 
         [Test]

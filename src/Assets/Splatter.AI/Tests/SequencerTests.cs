@@ -80,5 +80,18 @@ namespace Splatter.AI.Tests {
             Assert.AreEqual(3, second.Updates);
             Assert.AreEqual(1, third.Updates);
         }
+
+        [Test]
+        public void Sequencer_CurrentNodeIdx_TracksActiveChild() {
+            Sequencer sequencer = new Sequencer() {
+                CreateSuccessNode(),
+                CreateRunningNode(),
+                CreateSuccessNode(),
+            };
+
+            sequencer.OnUpdate();
+
+            Assert.AreEqual(1, sequencer.CurrentNodeIdx);
+        }
     }
 }

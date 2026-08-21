@@ -13,6 +13,19 @@ namespace Splatter.AI {
         public NodeResult Result { get; private set; } = NodeResult.Running;
 
         /// <summary>
+        /// How this node last stopped: completed with success or failure, or aborted via
+        /// <see cref="Stop"/>. Unlike <see cref="Result"/>, never reset when the node stops.
+        /// </summary>
+        public NodeStopReason LastStopReason { get; private set; } = NodeStopReason.None;
+
+        /// <summary>
+        /// Incremented every time this node stops, whether by completing or by being aborted.
+        /// Pollers (e.g. the behaviour tree viewer) compare against a previously seen value to
+        /// detect stops that happened between polls.
+        /// </summary>
+        public int StopCount { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Node"/> class.
         /// </summary>
         /// <param name="name">Node name</param>
@@ -41,6 +54,8 @@ namespace Splatter.AI {
             Result = Update();
 
             if (Result != NodeResult.Running) {
+                LastStopReason = Result == NodeResult.Success ? NodeStopReason.Success : NodeStopReason.Failure;
+                StopCount++;
                 OnStop();
                 IsStarted = false;
             }
@@ -61,6 +76,8 @@ namespace Splatter.AI {
                 }
 
                 node.IsStarted = false;
+                node.LastStopReason = NodeStopReason.Aborted;
+                node.StopCount++;
                 node.OnStop();
                 node.Result = NodeResult.Running;
             });
