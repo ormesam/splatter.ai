@@ -14,6 +14,9 @@ To add to your Unity project go to the Package Manager, click the plus in the to
 
 View the [wiki](https://github.com/ormesam/splatter.ai/wiki) for more documentation.
 
+## Ticking
+Trees are ticked by a central manager (`BehaviourTreeManager`) rather than per-component `Update` calls. Each `BehaviourTreeRunner` has a `Tick Interval` field: `1` (default) ticks every frame, while a higher value ticks the tree every that-many frames. Trees sharing an interval are automatically staggered so they don't all tick on the same frame, which makes large numbers of agents cheap to run.
+
 ## Example
 
 ```c#
