@@ -11,7 +11,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReactiveSelector"/> class.
         /// </summary>
-        public ReactiveSelector() : base("Reactive Selector") {
+        /// <param name="name">Node name</param>
+        public ReactiveSelector(string name = "Reactive Selector") : base(name) {
         }
 
         protected override void OnStart() {

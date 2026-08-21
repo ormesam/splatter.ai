@@ -13,7 +13,16 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="mode">Parallel mode</param>
         public Parallel(ParallelMode mode)
-            : base("Parallel") {
+            : this("Parallel", mode) {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        /// <param name="mode">Parallel mode</param>
+        public Parallel(string name, ParallelMode mode)
+            : base(name) {
 
             this.mode = mode;
         }

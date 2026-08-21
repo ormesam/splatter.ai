@@ -16,7 +16,16 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="seconds">Seconds the child is allowed to run for</param>
         /// <param name="clock">Returns the current time in seconds, e.g. () => Time.time</param>
-        public TimeLimitDecorator(float seconds, Func<float> clock) : base("Time Limit") {
+        public TimeLimitDecorator(float seconds, Func<float> clock) : this("Time Limit", seconds, clock) {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeLimitDecorator"/> class.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        /// <param name="seconds">Seconds the child is allowed to run for</param>
+        /// <param name="clock">Returns the current time in seconds, e.g. () => Time.time</param>
+        public TimeLimitDecorator(string name, float seconds, Func<float> clock) : base(name) {
             this.seconds = seconds;
             this.clock = clock;
         }

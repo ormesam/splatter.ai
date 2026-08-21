@@ -10,17 +10,20 @@ namespace Splatter.AI {
         private int attempts;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RetryUntilSuccess"/> class that retries forever.
+        /// Initializes a new instance of the <see cref="RetryUntilSuccess"/> class.
         /// </summary>
-        public RetryUntilSuccess() : this(-1) {
+        /// <param name="maxAttempts">Number of failed attempts before returning
+        /// <see cref="NodeResult.Failure"/>. Negative retries forever.</param>
+        public RetryUntilSuccess(int maxAttempts) : this("Retry Until Success", maxAttempts) {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RetryUntilSuccess"/> class.
         /// </summary>
+        /// <param name="name">Node name</param>
         /// <param name="maxAttempts">Number of failed attempts before returning
-        /// <see cref="NodeResult.Failure"/>. Negative retries forever.</param>
-        public RetryUntilSuccess(int maxAttempts) : base("Retry Until Success") {
+        /// <see cref="NodeResult.Failure"/>. Negative, the default, retries forever.</param>
+        public RetryUntilSuccess(string name = "Retry Until Success", int maxAttempts = -1) : base(name) {
             this.maxAttempts = maxAttempts;
         }
 

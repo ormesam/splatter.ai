@@ -8,7 +8,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="RepeatUntilFailure"/> class.
         /// </summary>
-        public RepeatUntilFailure() : base("Repeat Until Failure") {
+        /// <param name="name">Node name</param>
+        public RepeatUntilFailure(string name = "Repeat Until Failure") : base(name) {
         }
 
         protected override void OnStart() {

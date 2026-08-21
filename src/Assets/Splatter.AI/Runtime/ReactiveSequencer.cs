@@ -11,7 +11,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReactiveSequencer"/> class.
         /// </summary>
-        public ReactiveSequencer() : base("Reactive Sequence") {
+        /// <param name="name">Node name</param>
+        public ReactiveSequencer(string name = "Reactive Sequence") : base(name) {
         }
 
         protected override void OnStart() {

@@ -9,17 +9,20 @@ namespace Splatter.AI {
         private int completions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Repeater"/> class that repeats forever.
+        /// Initializes a new instance of the <see cref="Repeater"/> class.
         /// </summary>
-        public Repeater() : this(-1) {
+        /// <param name="times">Number of times the child must complete before returning
+        /// <see cref="NodeResult.Success"/>. Negative repeats forever.</param>
+        public Repeater(int times) : this("Repeater", times) {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repeater"/> class.
         /// </summary>
+        /// <param name="name">Node name</param>
         /// <param name="times">Number of times the child must complete before returning
-        /// <see cref="NodeResult.Success"/>. Negative repeats forever.</param>
-        public Repeater(int times) : base("Repeater") {
+        /// <see cref="NodeResult.Success"/>. Negative, the default, repeats forever.</param>
+        public Repeater(string name = "Repeater", int times = -1) : base(name) {
             this.times = times;
         }
 

@@ -7,14 +7,8 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="IdleNode"/> class.
         /// </summary>
-        public IdleNode() : this("Idle") {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IdleNode"/> class.
-        /// </summary>
         /// <param name="name">Node name</param>
-        public IdleNode(string name) : base(name) {
+        public IdleNode(string name = "Idle") : base(name) {
         }
 
         protected override void OnStart() {

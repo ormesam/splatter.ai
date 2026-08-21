@@ -36,12 +36,11 @@ namespace Splatter.AI {
                 Child = new Leaf("Chase player", ChasePlayer),
             };
 
-            var patrol = new Sequencer() {
+            var patrol = new Sequencer("Patrol") {
                 new Leaf("Set next waypoint", SetNextWaypoint),
                 new WaitUntilNode("Move to waypoint", HasReachedDestination),
                 new WaitNode("Pause", 1, 3),
             };
-            patrol.Name = "Patrol";
 
             return new Repeater() {
                 Child = new Selector() {

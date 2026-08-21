@@ -6,7 +6,7 @@
     public class RunningDecorator : Decorator {
         private bool childCompleted;
 
-        public RunningDecorator() : base("Always Running") {
+        public RunningDecorator(string name = "Always Running") : base(name) {
         }
 
         protected override void OnStart() {

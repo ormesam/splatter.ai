@@ -16,7 +16,16 @@ namespace Splatter.AI {
         /// </summary>
         /// <param name="seconds">Seconds to wait after the child completes before it can run again</param>
         /// <param name="clock">Returns the current time in seconds, e.g. () => Time.time</param>
-        public CooldownDecorator(float seconds, Func<float> clock) : base("Cooldown") {
+        public CooldownDecorator(float seconds, Func<float> clock) : this("Cooldown", seconds, clock) {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CooldownDecorator"/> class.
+        /// </summary>
+        /// <param name="name">Node name</param>
+        /// <param name="seconds">Seconds to wait after the child completes before it can run again</param>
+        /// <param name="clock">Returns the current time in seconds, e.g. () => Time.time</param>
+        public CooldownDecorator(string name, float seconds, Func<float> clock) : base(name) {
             this.seconds = seconds;
             this.clock = clock;
         }

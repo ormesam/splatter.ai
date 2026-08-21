@@ -12,15 +12,17 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="RandomSelector"/> class.
         /// </summary>
-        public RandomSelector() : this(new Random()) {
+        /// <param name="random">Source of randomness for shuffling</param>
+        public RandomSelector(Random random) : this("Random Selector", random) {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RandomSelector"/> class.
         /// </summary>
-        /// <param name="random">Source of randomness for shuffling</param>
-        public RandomSelector(Random random) : base("Random Selector") {
-            this.random = random;
+        /// <param name="name">Node name</param>
+        /// <param name="random">Source of randomness for shuffling. Defaults to a new <see cref="Random"/>.</param>
+        public RandomSelector(string name = "Random Selector", Random random = null) : base(name) {
+            this.random = random ?? new Random();
         }
 
         protected override void OnStart() {

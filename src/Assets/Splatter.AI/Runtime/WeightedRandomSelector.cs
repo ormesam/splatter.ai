@@ -16,15 +16,17 @@ namespace Splatter.AI {
         /// <summary>
         /// Initializes a new instance of the <see cref="WeightedRandomSelector"/> class.
         /// </summary>
-        public WeightedRandomSelector() : this(new Random()) {
+        /// <param name="random">Source of randomness for ordering</param>
+        public WeightedRandomSelector(Random random) : this("Weighted Random Selector", random) {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeightedRandomSelector"/> class.
         /// </summary>
-        /// <param name="random">Source of randomness for ordering</param>
-        public WeightedRandomSelector(Random random) : base("Weighted Random Selector") {
-            this.random = random;
+        /// <param name="name">Node name</param>
+        /// <param name="random">Source of randomness for ordering. Defaults to a new <see cref="Random"/>.</param>
+        public WeightedRandomSelector(string name = "Weighted Random Selector", Random random = null) : base(name) {
+            this.random = random ?? new Random();
         }
 
         /// <summary>
