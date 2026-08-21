@@ -32,20 +32,16 @@ namespace Splatter.AI {
         }
 
         protected override Node CreateRoot() {
-            var chase = new BlackboardObserverDecorator(Tree.Blackboard, PlayerVisibleKey, true, AbortMode.Both) {
-                Child = new Leaf("Chase player", ChasePlayer),
-            };
-
-            var patrol = new Sequencer("Patrol") {
-                new Leaf("Set next waypoint", SetNextWaypoint),
-                new WaitUntilNode("Move to waypoint", HasReachedDestination),
-                new WaitNode("Pause", 1, 3),
-            };
-
             return new Repeater() {
                 Child = new Selector() {
-                    chase,
-                    patrol,
+                    new BlackboardObserverDecorator(Tree.Blackboard, PlayerVisibleKey, true, AbortMode.Both) {
+                        Child = new Leaf("Chase player", ChasePlayer),
+                    },
+                    new Sequencer("Patrol") {
+                        new Leaf("Set next waypoint", SetNextWaypoint),
+                        new WaitUntilNode("Move to waypoint", HasReachedDestination),
+                        new WaitNode("Pause", 1, 3),
+                    },
                 },
             };
         }
