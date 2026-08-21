@@ -1,31 +1,53 @@
+.bt-canvas {
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: #1e1e1e;
+}
+
 .node {
+    position: absolute;
     width: 180px;
+    min-height: 44px;
+    background-color: #383838;
+    border-width: 1px;
+    border-color: #191919;
+    border-radius: 6px;
+}
+
+.node-title {
+    flex-direction: row;
+    align-items: center;
+    background-color: #2b2b2b;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 4px 6px;
+}
+
+.node-title-label {
+    flex-grow: 1;
+    -unity-font-style: bold;
 }
 
 .node .type-label {
     font-size: 9px;
     -unity-font-style: italic;
     opacity: 0.6;
-    margin-left: 4px;
-    align-self: center;
+    margin: 2px 6px 4px 6px;
 }
 
 .node .index-label {
     font-size: 10px;
     opacity: 0.8;
-    margin-right: 4px;
-    align-self: center;
+    margin-left: 4px;
 }
 
-.node.subtree #node-border {
-    border-left-color: #4A90D9;
-    border-right-color: #4A90D9;
-    border-top-color: #4A90D9;
-    border-bottom-color: #4A90D9;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
+.node.running {
+    border-color: rgb(184, 135, 10);
+}
+
+.node.subtree {
+    border-width: 2px;
+    border-color: #4A90D9;
 }
 
 .blackboard-panel {

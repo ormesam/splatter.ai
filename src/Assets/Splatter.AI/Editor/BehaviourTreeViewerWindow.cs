@@ -13,7 +13,7 @@ namespace Splatter.AI.Editor {
     /// window shows an empty state.
     /// </summary>
     public class BehaviourTreeViewerWindow : EditorWindow {
-        private BehaviourTreeGraphView graphView;
+        private BehaviourTreeCanvas graphView;
         private BlackboardPanel blackboardPanel;
         private ToolbarMenu treeMenu;
         private ToolbarToggle lockToggle;
@@ -65,7 +65,7 @@ namespace Splatter.AI.Editor {
             var graphContainer = new VisualElement();
             graphContainer.style.flexGrow = 1;
 
-            graphView = new BehaviourTreeGraphView();
+            graphView = new BehaviourTreeCanvas();
             graphView.StretchToParentSize();
             graphContainer.Add(graphView);
 

@@ -1,25 +1,25 @@
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using BTNode = Splatter.AI.Node;
 
 namespace Splatter.AI.Editor {
     /// <summary>
-    /// Read-only graph node presenting a single behaviour tree node: name, type, and live
-    /// status. Running nodes are highlighted solid; stopped nodes flash their
+    /// Read-only card presenting a single behaviour tree node: name, type, and live status.
+    /// Running nodes are highlighted solid; stopped nodes flash their
     /// <see cref="NodeStopReason"/> colour and fade out over wall-clock time.
     /// </summary>
-    public class NodeView : UnityEditor.Experimental.GraphView.Node {
+    public class NodeView : VisualElement {
         private static readonly Color RunningColour = new Color(0.72f, 0.53f, 0.04f);
         private static readonly Color SuccessColour = new Color(0.18f, 0.55f, 0.34f);
         private static readonly Color FailureColour = new Color(0.69f, 0.20f, 0.20f);
         private static readonly Color AbortedColour = new Color(0.57f, 0.27f, 0.85f);
+        private static readonly Color DefaultFlashColour = new Color(0.8f, 0.8f, 0.8f);
 
         private const double FadeSeconds = 2.0;
 
+        private readonly VisualElement titleContainer;
         private readonly Label indexLabel;
-        private readonly Color defaultPortColour;
         private int lastSeenStopCount;
         private NodeStopReason fadeReason;
         private double fadeStartTime = double.NegativeInfinity;
@@ -35,52 +35,43 @@ namespace Splatter.AI.Editor {
         /// </summary>
         public List<NodeView> ChildViews { get; } = new List<NodeView>();
 
-        public Port InputPort { get; }
-
-        public Port OutputPort { get; }
-
-        public NodeView(BTNode node, bool isRoot) {
+        public NodeView(BTNode node) {
             Node = node;
-            title = string.IsNullOrEmpty(node.Name) ? node.GetType().Name : node.Name;
-            expanded = true;
-
-            // Read-only graph: the layout pass owns positions, and nothing is deletable.
-            capabilities &= ~(Capabilities.Deletable | Capabilities.Movable);
-
             AddToClassList("node");
 
-            var typeLabel = new Label(node.GetType().Name);
-            typeLabel.AddToClassList("type-label");
-            titleContainer.Add(typeLabel);
+            titleContainer = new VisualElement();
+            titleContainer.AddToClassList("node-title");
+
+            var titleLabel = new Label(string.IsNullOrEmpty(node.Name) ? node.GetType().Name : node.Name);
+            titleLabel.AddToClassList("node-title-label");
+            titleContainer.Add(titleLabel);
 
             indexLabel = new Label();
             indexLabel.AddToClassList("index-label");
             indexLabel.style.display = DisplayStyle.None;
             titleContainer.Add(indexLabel);
 
+            Add(titleContainer);
+
+            var typeLabel = new Label(node.GetType().Name);
+            typeLabel.AddToClassList("type-label");
+            Add(typeLabel);
+
             if (node is SubtreeNode) {
                 AddToClassList("subtree");
             }
 
-            if (!isRoot) {
-                // Multi capacity: a shared node instance can have edges from several parents.
-                InputPort = CreatePort(Direction.Input, Port.Capacity.Multi);
-                inputContainer.Add(InputPort);
-            }
-
-            if (node is Composite || node is Decorator || node is SubtreeNode) {
-                var capacity = node is Composite ? Port.Capacity.Multi : Port.Capacity.Single;
-                OutputPort = CreatePort(Direction.Output, capacity);
-                outputContainer.Add(OutputPort);
-            }
-
-            defaultPortColour = InputPort?.portColor ?? OutputPort?.portColor ?? Color.white;
-
             // Only stops that happen after the view is built should flash.
             lastSeenStopCount = node.StopCount;
+        }
 
-            RefreshExpandedState();
-            RefreshPorts();
+        /// <summary>
+        /// Places the card; the layout pass owns positions. Width comes from USS and height is
+        /// content-driven, so only the position is applied.
+        /// </summary>
+        public void SetPosition(Rect position) {
+            style.left = position.x;
+            style.top = position.y;
         }
 
         /// <summary>
@@ -98,7 +89,6 @@ namespace Splatter.AI.Editor {
             if (Node.IsStarted) {
                 AddToClassList("running");
                 titleContainer.style.backgroundColor = RunningColour;
-                SetPortColour(RunningColour);
                 UpdateIndexLabel();
 
                 return;
@@ -113,14 +103,12 @@ namespace Splatter.AI.Editor {
 
             if (t >= 1f) {
                 titleContainer.style.backgroundColor = StyleKeyword.Null;
-                SetPortColour(defaultPortColour);
 
                 return;
             }
 
             var flash = FlashColour(fadeReason);
             titleContainer.style.backgroundColor = new Color(flash.r, flash.g, flash.b, 1f - t);
-            SetPortColour(Color.Lerp(flash, defaultPortColour, t));
         }
 
         private void UpdateIndexLabel() {
@@ -144,24 +132,7 @@ namespace Splatter.AI.Editor {
                 case NodeStopReason.Aborted:
                     return AbortedColour;
                 default:
-                    return defaultPortColour;
-            }
-        }
-
-        private Port CreatePort(Direction direction, Port.Capacity capacity) {
-            var port = InstantiatePort(Orientation.Vertical, direction, capacity, typeof(bool));
-            port.portName = string.Empty;
-
-            return port;
-        }
-
-        private void SetPortColour(Color colour) {
-            if (InputPort != null) {
-                InputPort.portColor = colour;
-            }
-
-            if (OutputPort != null) {
-                OutputPort.portColor = colour;
+                    return DefaultFlashColour;
             }
         }
     }

@@ -93,13 +93,13 @@ For polled conditions instead, use `GuardDecorator`, which re-evaluates every up
 
 Open **Window > Splatter > Behaviour Tree Viewer** to watch a tree run.
 
-Trees are built in code at `Start`, so the viewer is play-mode only. It follows the selected GameObject's `BehaviourTreeRunner`, or you can pick a tree from the toolbar dropdown; **Lock** pins the current tree so it stops following the selection, and **Frame** re-centres the graph. The right-hand pane lists the tree's blackboard, plus a foldout per `SubtreeNode` for its scoped blackboard.
+Trees are built in code at `Start`, so the viewer is play-mode only. It follows the selected GameObject's `BehaviourTreeRunner`, or you can pick a tree from the toolbar dropdown; **Lock** pins the current tree so it stops following the selection, and **Frame** (or the **F** key) re-centres the graph. Drag anywhere with the left or middle mouse button to pan, and scroll to zoom on the cursor. The right-hand pane lists the tree's blackboard, plus a foldout per `SubtreeNode` for its scoped blackboard.
 
 Nodes are coloured by what they are doing:
 
 | Colour | Meaning |
 | --- | --- |
-| Amber | Currently running |
+| Amber | Currently running — the edges along the active branch tint amber too |
 | Green | Stopped with `Success` |
 | Red | Stopped with `Failure` |
 | Violet | Aborted |
