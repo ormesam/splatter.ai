@@ -1,0 +1,19 @@
+{
+    "name": "Splatter.AI.Editor",
+    "rootNamespace": "Splatter.AI.Editor",
+    "references": [
+        "Splatter.AI",
+        "Splatter.AI.Unity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
