@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Splatter.AI {
+namespace Splatter.AI.Unity {
     /// <summary>
     /// Central manager that ticks all registered behaviour trees from a single update loop.
     /// <see cref="BehaviourTreeRunner"/> registers with it automatically; register directly to

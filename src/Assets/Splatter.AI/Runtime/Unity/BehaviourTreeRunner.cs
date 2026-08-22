@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Splatter.AI {
+namespace Splatter.AI.Unity {
     /// <summary>
     /// Runs a <see cref="BehaviourTree"/> as a Unity component, ticked centrally by
     /// <see cref="BehaviourTreeManager"/>. Override <see cref="CreateRoot"/> to create the tree

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Splatter.AI.Unity;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Leaves;
 
 namespace Splatter.AI.Tests {
     public class IdleNodeTests : TestBase {

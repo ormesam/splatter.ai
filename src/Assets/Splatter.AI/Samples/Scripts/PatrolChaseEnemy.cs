@@ -1,3 +1,7 @@
+using Splatter.AI.Composites;
+using Splatter.AI.Decorators;
+using Splatter.AI.Leaves;
+using Splatter.AI.Unity;
 using UnityEngine;
 using UnityEngine.AI;
 

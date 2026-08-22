@@ -1,4 +1,5 @@
 using System;
+using Splatter.AI.Decorators;
 
 namespace Splatter.AI.Tests.Stubs {
     public class TrackingObservingDecorator : ObservingDecorator {

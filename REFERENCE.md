@@ -2,11 +2,35 @@
 
 Reference for Splatter.AI. See the [README](README.md) for installation, a quick start, and a worked example.
 
+- [Assemblies and namespaces](#assemblies-and-namespaces)
 - [Ticking](#ticking)
 - [Reactivity](#reactivity)
 - [Nodes](#nodes)
 - [Behaviour Tree Viewer](#behaviour-tree-viewer)
 - [Tests](#tests)
+
+## Assemblies and namespaces
+
+The library is split across two runtime assemblies. `Splatter.AI` is the core: it has no engine
+references, which is what lets the node logic be unit tested headlessly. `Splatter.AI.Unity` adds
+the pieces that need `UnityEngine` — the `MonoBehaviour` entry point, the central tick manager, and
+`WaitNode`.
+
+Folders under `Runtime/` map one-to-one onto namespaces:
+
+| Namespace | Contents |
+| --- | --- |
+| `Splatter.AI` (`Runtime/Core`) | `Node`, `BehaviourTree`, `ContextBehaviourTree<T>`, `Blackboard`, the scheduler, and the `NodeResult` / `NodeStopReason` / `AbortMode` enums. |
+| `Splatter.AI.Composites` (`Runtime/Composites`) | The `Composite` base, the [composites](#composites) themselves, and `ParallelMode`. |
+| `Splatter.AI.Decorators` (`Runtime/Decorators`) | The `Decorator` and `ObservingDecorator` bases, and the [decorators](#decorators) themselves. |
+| `Splatter.AI.Leaves` (`Runtime/Leaves`) | [Leaves](#leaves), except `WaitNode`. |
+| `Splatter.AI.Unity` (`Runtime/Unity`) | `BehaviourTreeRunner`, `BehaviourTreeManager`, `WaitNode`. |
+
+Each family's base type sits alongside its implementations, so a custom node needs only the one
+namespace it extends: derive from `Composite` with `using Splatter.AI.Composites;`, from `Decorator`
+or `ObservingDecorator` with `using Splatter.AI.Decorators;`. `Node` and `NodeResult` are in the
+root namespace, which every `Splatter.AI.*` namespace resolves without a `using`. Building a tree
+generally draws on several families at once, as in the [README example](README.md#example).
 
 ## Ticking
 

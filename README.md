@@ -32,6 +32,10 @@ An enemy that wanders until it sees the player, chases while it can see them, an
 
 ```c#
 using Splatter.AI;
+using Splatter.AI.Composites;
+using Splatter.AI.Decorators;
+using Splatter.AI.Leaves;
+using Splatter.AI.Unity;
 using UnityEngine;
 
 public class Zombie : BehaviourTreeRunner {

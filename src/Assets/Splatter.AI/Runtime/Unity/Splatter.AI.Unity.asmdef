@@ -1,6 +1,6 @@
 {
     "name": "Splatter.AI.Unity",
-    "rootNamespace": "Splatter.AI",
+    "rootNamespace": "Splatter.AI.Unity",
     "references": [
         "Splatter.AI"
     ],

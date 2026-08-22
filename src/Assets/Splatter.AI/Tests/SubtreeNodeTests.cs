@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Splatter.AI.Leaves;
 using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {

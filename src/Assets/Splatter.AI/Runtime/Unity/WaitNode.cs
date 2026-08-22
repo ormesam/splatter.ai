@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Splatter.AI {
+namespace Splatter.AI.Unity {
     /// <summary>
     /// Wait for x number of seconds before returning <see cref="NodeResult.Success"/>.
     /// </summary>

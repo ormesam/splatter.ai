@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Splatter.AI.Composites;
 
 namespace Splatter.AI.Tests {
     public class ParallelAnyFailureTests : TestBase {

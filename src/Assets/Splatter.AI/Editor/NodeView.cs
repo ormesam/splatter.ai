@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Splatter.AI.Composites;
+using Splatter.AI.Leaves;
 using UnityEngine;
 using UnityEngine.UIElements;
 using BTNode = Splatter.AI.Node;
