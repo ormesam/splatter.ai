@@ -2,14 +2,17 @@
     "name": "Splatter.AI.Editor",
     "rootNamespace": "Splatter.AI.Editor",
     "references": [
-        "GUID:3b22de0df2a7ddc4ea93750ed4212965"
+        "Splatter.AI",
+        "Splatter.AI.Unity"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

@@ -7,8 +7,11 @@ namespace Splatter.AI.Tests.Stubs {
         public int Starts { get; private set; }
         public int Updates { get; private set; }
         public int Stops { get; private set; }
+        public NodeResult ResultAtLastStop { get; private set; }
+        public NodeStopReason ReasonAtLastStop { get; private set; }
+        public int StopCountAtLastStop { get; private set; }
 
-        public TrackingNode(BehaviourTree tree, Func<NodeResult> onUpdate) : base("Tracking", tree) {
+        public TrackingNode(Func<NodeResult> onUpdate) : base("Tracking") {
             this.onUpdate = onUpdate;
         }
 
@@ -24,6 +27,9 @@ namespace Splatter.AI.Tests.Stubs {
 
         protected override void OnStop() {
             Stops++;
+            ResultAtLastStop = Result;
+            ReasonAtLastStop = LastStopReason;
+            StopCountAtLastStop = StopCount;
         }
     }
 }

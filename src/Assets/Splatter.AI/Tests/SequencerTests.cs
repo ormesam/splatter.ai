@@ -1,51 +1,46 @@
 using NUnit.Framework;
+using Splatter.AI.Composites;
+using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class SequencerTests : TestBase {
         [Test]
         public void Sequencer_NoChildren() {
-            Sequencer sequencer = new Sequencer(Tree);
+            Sequencer sequencer = new Sequencer();
 
             Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
         }
 
         [Test]
         public void Sequencer_Success() {
-            Sequencer sequencer = new Sequencer(Tree);
-            sequencer.Children = new[] {
+            Sequencer sequencer = new Sequencer() {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateSuccessNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
         }
 
         [Test]
         public void Sequencer_Failure() {
-            Sequencer sequencer = new Sequencer(Tree);
-            sequencer.Children = new[] {
+            Sequencer sequencer = new Sequencer() {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateFailureNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
 
-            sequencer.Children = new[] {
+            sequencer = new Sequencer() {
                 CreateSuccessNode(),
                 CreateFailureNode(),
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
 
-            sequencer.Children = new[] {
+            sequencer = new Sequencer() {
                 CreateFailureNode(),
                 CreateRunningNode(),
                 CreateRunningNode(),
@@ -56,24 +51,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Sequencer_Running() {
-            Sequencer sequencer = new Sequencer(Tree);
-            sequencer.Children = new[] {
-                CreateRunningNode(),
-                CreateRunningNode(),
-                CreateRunningNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-
-            sequencer.Children = new[] {
-                CreateSuccessNode(),
-                CreateRunningNode(),
-                CreateRunningNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-
-            sequencer.Children = new[] {
+            Sequencer sequencer = new Sequencer() {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
@@ -83,104 +61,38 @@ namespace Splatter.AI.Tests {
         }
 
         [Test]
-        public void Sequencer_Abort_Self() {
-            bool condition = true;
+        public void Sequencer_ResumesAtRunningChild() {
+            var secondResult = NodeResult.Running;
 
-            Sequencer sequencer = new Sequencer(Tree);
-            sequencer.SetAbortType(AbortType.Self, () => condition);
-            sequencer.Children = new[] {
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-            };
+            var first = new TrackingNode(() => NodeResult.Success);
+            var second = new TrackingNode(() => secondResult);
+            var third = new TrackingNode(() => NodeResult.Success);
+
+            Sequencer sequencer = new Sequencer() { first, second, third };
 
             Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
             Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            condition = false;
-            Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
+
+            secondResult = NodeResult.Success;
+
+            Assert.AreEqual(NodeResult.Success, sequencer.OnUpdate());
+
+            Assert.AreEqual(1, first.Updates);
+            Assert.AreEqual(3, second.Updates);
+            Assert.AreEqual(1, third.Updates);
         }
 
         [Test]
-        public void Sequencer_Abort_Lower() {
-            bool condition = false;
-
-            Sequencer sequencer = new Sequencer(Tree);
-            Sequencer childSequencer = new Sequencer(Tree);
-            childSequencer.SetAbortType(AbortType.Lower, () => condition);
-
-            childSequencer.Children = new[] {
+        public void Sequencer_CurrentNodeIdx_TracksActiveChild() {
+            Sequencer sequencer = new Sequencer() {
                 CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
+                CreateRunningNode(),
                 CreateSuccessNode(),
             };
 
-            sequencer.Children = new[] {
-                CreateSuccessNode(),
-                childSequencer,
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-            };
+            sequencer.OnUpdate();
 
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-
-            condition = true;
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-        }
-
-        [Test]
-        public void Sequencer_Abort_SelfAndLower() {
-            bool condition = false;
-
-            Sequencer sequencer = new Sequencer(Tree);
-            Sequencer childSequencer = new Sequencer(Tree);
-            childSequencer.SetAbortType(AbortType.SelfAndLower, () => condition);
-
-            childSequencer.Children = new[] {
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-            };
-
-            sequencer.Children = new[] {
-                CreateSuccessNode(),
-                childSequencer,
-                CreateSuccessNode(),
-                CreateSuccessNode(),
-                CreateFailureNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Failure, sequencer.OnUpdate());
-
-            condition = true;
-
-            // Will always be running as nothing will get executed past the child sequencer
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, sequencer.OnUpdate());
+            Assert.AreEqual(1, sequencer.CurrentNodeIdx);
         }
     }
 }

@@ -1,12 +1,12 @@
 using NUnit.Framework;
+using Splatter.AI.Composites;
 using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class ParallelWaitForAllToSucceed : TestBase {
         [Test]
         public void Parallel_Success() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToSucceed);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(ParallelMode.WaitForAllToSucceed) {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateSuccessNode(),
@@ -17,8 +17,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Failure() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToSucceed);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(ParallelMode.WaitForAllToSucceed) {
                 CreateSuccessNode(),
                 CreateSuccessNode(),
                 CreateFailureNode(),
@@ -31,11 +30,13 @@ namespace Splatter.AI.Tests {
         public void Parallel_ChildrenSucceedOnDifferentUpdates() {
             var secondResult = NodeResult.Running;
 
-            var first = new TrackingNode(Tree, () => NodeResult.Success);
-            var second = new TrackingNode(Tree, () => secondResult);
+            var first = new TrackingNode(() => NodeResult.Success);
+            var second = new TrackingNode(() => secondResult);
 
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToSucceed);
-            parallel.Children = new Node[] { first, second };
+            Parallel parallel = new Parallel(ParallelMode.WaitForAllToSucceed) {
+                first,
+                second,
+            };
 
             Assert.AreEqual(NodeResult.Running, parallel.OnUpdate());
 
@@ -47,8 +48,7 @@ namespace Splatter.AI.Tests {
 
         [Test]
         public void Parallel_Running() {
-            Parallel parallel = new Parallel(Tree, ParallelMode.WaitForAllToSucceed);
-            parallel.Children = new[]{
+            Parallel parallel = new Parallel(ParallelMode.WaitForAllToSucceed) {
                 CreateSuccessNode(),
                 CreateRunningNode(),
                 CreateSuccessNode(),

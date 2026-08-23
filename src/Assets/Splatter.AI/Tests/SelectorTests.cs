@@ -1,37 +1,19 @@
 using NUnit.Framework;
+using Splatter.AI.Composites;
 using Splatter.AI.Tests.Stubs;
 
 namespace Splatter.AI.Tests {
     public class SelectorTests : TestBase {
         [Test]
         public void Selector_NoChildren() {
-            Selector selector = new Selector(Tree);
+            Selector selector = new Selector();
 
             Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
-        }
-
-        [Test]
-        public void Selector_Abort_Self_StopsRunningChild() {
-            bool condition = true;
-
-            var child = new TrackingNode(Tree, () => NodeResult.Running);
-
-            Selector selector = new Selector(Tree);
-            selector.SetAbortType(AbortType.Self, () => condition);
-            selector.Children = new Node[] { child };
-
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            condition = false;
-            Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
-
-            Assert.AreEqual(1, child.Stops);
-            Assert.IsFalse(child.IsStarted);
         }
 
         [Test]
         public void Selector_Success() {
-            Selector selector = new Selector(Tree);
-            selector.Children = new[] {
+            Selector selector = new Selector() {
                 CreateSuccessNode(),
                 CreateRunningNode(),
                 CreateRunningNode(),
@@ -39,149 +21,78 @@ namespace Splatter.AI.Tests {
 
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
 
-            selector.Children = new[] {
+            selector = new Selector() {
                 CreateFailureNode(),
                 CreateSuccessNode(),
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
 
-            selector.Children = new[] {
+            selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateSuccessNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
         }
 
         [Test]
         public void Selector_Failed() {
-            Selector selector = new Selector(Tree);
-            selector.Children = new[] {
+            Selector selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
                 CreateFailureNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
         }
 
         [Test]
         public void Selector_Running() {
-            Selector selector = new Selector(Tree);
-            selector.Children = new[] {
-                CreateRunningNode(),
-                CreateRunningNode(),
+            Selector selector = new Selector() {
+                CreateFailureNode(),
+                CreateFailureNode(),
                 CreateRunningNode(),
             };
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
         }
 
         [Test]
-        public void Selector_Abort_Self() {
-            bool condition = true;
+        public void Selector_ResumesAtRunningChild() {
+            var secondResult = NodeResult.Running;
 
-            Selector selector = new Selector(Tree);
-            selector.SetAbortType(AbortType.Self, () => condition);
-            selector.Children = new[] {
-                CreateFailureNode(),
-                CreateFailureNode(),
-                CreateSuccessNode(),
-            };
+            var first = new TrackingNode(() => NodeResult.Failure);
+            var second = new TrackingNode(() => secondResult);
+            var third = new TrackingNode(() => NodeResult.Success);
+
+            Selector selector = new Selector() { first, second, third };
 
             Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            condition = false;
-            Assert.AreEqual(NodeResult.Failure, selector.OnUpdate());
+            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
+
+            secondResult = NodeResult.Failure;
+
+            Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
+
+            Assert.AreEqual(1, first.Updates);
+            Assert.AreEqual(3, second.Updates);
+            Assert.AreEqual(1, third.Updates);
         }
 
         [Test]
-        public void Selector_Abort_Lower() {
-            bool condition = false;
-
-            Selector selector = new Selector(Tree);
-            Selector childSelector = new Selector(Tree);
-            childSelector.SetAbortType(AbortType.Lower, () => condition);
-
-            childSelector.Children = new[] {
+        public void Selector_CurrentNodeIdx_TracksActiveChild() {
+            Selector selector = new Selector() {
                 CreateFailureNode(),
                 CreateFailureNode(),
-                CreateFailureNode(),
+                CreateRunningNode(),
             };
 
-            selector.Children = new[] {
-                CreateFailureNode(),
-                childSelector,
-                CreateFailureNode(),
-                CreateFailureNode(),
-                CreateSuccessNode(),
-            };
+            selector.OnUpdate();
 
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
-
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-
-            condition = true;
-
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-        }
-
-        [Test]
-        public void Selector_Abort_SelfAndLower() {
-            bool condition = false;
-
-            Selector selector = new Selector(Tree);
-            Selector childSelector = new Selector(Tree);
-            childSelector.SetAbortType(AbortType.SelfAndLower, () => condition);
-
-            childSelector.Children = new[] {
-                CreateSuccessNode(),
-                CreateFailureNode(),
-                CreateFailureNode(),
-            };
-
-            selector.Children = new[] {
-                CreateFailureNode(),
-                CreateFailureNode(),
-                childSelector,
-                CreateFailureNode(),
-                CreateSuccessNode(),
-            };
-
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
-
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-            Assert.AreEqual(NodeResult.Running, selector.OnUpdate());
-
-            condition = true;
-
-            Assert.AreEqual(NodeResult.Success, selector.OnUpdate());
+            Assert.AreEqual(2, selector.CurrentNodeIdx);
         }
     }
 }
