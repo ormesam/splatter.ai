@@ -70,4 +70,6 @@ public class Zombie : BehaviourTreeRunner {
 ## Patrol / Chase Demo
 Found under Samples, in `Samples/Scenes/PatrolDemo.unity`. `Samples/Scripts/PatrolChaseEnemy.cs` is the tree.
 
-https://user-images.githubusercontent.com/8319419/155850237-8c4a9a6e-f704-4711-b386-8e6ffe98d848.mp4
+https://github.com/user-attachments/assets/677fc7b2-8aa5-4c25-941b-baa69e30ab4e
+
+
